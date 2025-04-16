@@ -17,11 +17,11 @@ const carData = {
   rating: 4.9,
   reviews: 32,
   images: [
-    "/public/images/carsdemo/2020-lamborghini-aventador-svj-roadster-drive-118-1576871373.avif",
-    "/public/images/carsdemo/1599791635906-photos.jpg",
-    "/public/images/carsdemo/images.jpeg",
-    "/public/images/carsdemo/lamborghini-aventador-dashboard-view-348215.avif",
-    "/public/images/carsdemo/paris-france-oct-04-2018-metallic-green-lamborghini-aventador-svj-roadster-mondial-paris-motor-show-supercar-manufactured-by-italian-lamborghini-TWRN9W.jpg",
+    "/images/carsdemo/2020-lamborghini-aventador-svj-roadster-drive-118-1576871373.avif",
+    "/images/carsdemo/1599791635906-photos.jpg",
+    "/images/carsdemo/images.jpeg",
+    "/images/carsdemo/lamborghini-aventador-dashboard-view-348215.avif",
+    "/images/carsdemo/paris-france-oct-04-2018-metallic-green-lamborghini-aventador-svj-roadster-mondial-paris-motor-show-supercar-manufactured-by-italian-lamborghini-TWRN9W.jpg",
 
   ],
   amenities: ["ac", "parking"],
