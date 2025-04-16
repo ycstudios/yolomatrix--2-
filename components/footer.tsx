@@ -14,8 +14,8 @@ export default function Footer() {
   const isDarkMode = theme === 'dark'  // Determine mode from theme context
 
   return (
-    <footer className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} pt-16 pb-8`}>
-      <div className="container mx-auto px-4">
+<footer className="pt-16 pb-8 bg-gray-50 dark:bg-gray-950">
+  <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Logo and About */}
           <div>
