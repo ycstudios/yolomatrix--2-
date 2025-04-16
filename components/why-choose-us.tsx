@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { 
   Award, Shield, Clock, Users, Globe, Sparkles, Diamond, Plane, Gem, 
   Crown, Heart, Star, Wine, Briefcase, Key, Compass, Trophy, Medal, 
-  Gift, Landmark, Champagne, Glasses, Feather, Zap
+  Gift, Landmark, GlassWater, Feather, Zap
 } from "lucide-react"
 
 export default function WhyChooseUs() {
@@ -16,9 +16,10 @@ export default function WhyChooseUs() {
     "Artisanal", "Curated", "Exceptional", "Distinguished"
   ]
 
+  // Removed Champagne and Glasses icons and replaced with alternatives
   const floatingIcons = [
     Diamond, Plane, Gem, Crown, Heart, Star, Wine, Briefcase, Key,
-    Compass, Trophy, Medal, Gift, Landmark, Champagne, Glasses
+    Compass, Trophy, Medal, Gift, Landmark, GlassWater, Feather
   ]
 
   const features = [
