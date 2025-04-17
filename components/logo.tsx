@@ -12,7 +12,6 @@ interface LogoProps {
 }
 
 export default function Logo({ className, width = 180, height = 50 }: LogoProps) {
-  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Wait for client-side mount to avoid hydration mismatch
@@ -23,18 +22,15 @@ export default function Logo({ className, width = 180, height = 50 }: LogoProps)
   // Prevent rendering until after mount
   if (!mounted) return null;
 
-  const logoFilter = theme === 'dark' ? 'none' : 'invert(1)';
 
   return (
     <Link href="/" className={className}>
       <Image
-        src="/images/logo-nobg.png"
+        src="/images/logo.png"
         alt="YoloMatrix Logo"
         width={width}
         height={height}
         className="object-contain"
-        style={{ filter: logoFilter }}
-        priority
       />
     </Link>
   );

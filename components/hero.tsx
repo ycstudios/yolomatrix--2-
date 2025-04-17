@@ -10,14 +10,11 @@ import { useTheme } from "next-themes"
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [buttonTextIndex, setButtonTextIndex] = useState(0)
-  const [headerTextIndex, setHeaderTextIndex] = useState(0)
-  const [headerVisible, setHeaderVisible] = useState(true)
   const [subtitleVisible, setSubtitleVisible] = useState(true)
-  const { t, getHeaderTexts, getButtonTexts } = useLanguage()
+  const { t, getButtonTexts } = useLanguage()
   const { theme, resolvedTheme } = useTheme()
   const isLightMode = theme === "light" || resolvedTheme === "light"
 
-  const headerTexts = getHeaderTexts()
   const buttonTexts = getButtonTexts()
 
   useEffect(() => {
@@ -30,32 +27,24 @@ export default function Hero() {
       setButtonTextIndex((prevIndex) => (prevIndex + 1) % buttonTexts.length)
     }, 5000)
 
-    // Set up header text and subtitle rotation with fade effect
-    const headerIntervalId = setInterval(() => {
-      // Fade out both heading and subtitle
-      setHeaderVisible(false)
+    // Set up subtitle rotation with fade effect
+    const subtitleIntervalId = setInterval(() => {
+      // Fade out subtitle
       setSubtitleVisible(false)
       
       setTimeout(() => {
-        setHeaderTextIndex((prevIndex) => (prevIndex + 1) % headerTexts.length)
-        
-        // Fade in heading first
-        setHeaderVisible(true)
-        
         // Fade in subtitle with slight delay
-        setTimeout(() => {
-          setSubtitleVisible(true)
-        }, 300)
-      }, 500) // Wait for fade out before changing text
+        setSubtitleVisible(true)
+      }, 500) // Wait for fade out before showing again
       
     }, 5000)
 
     // Cleanup intervals on unmount
     return () => {
       clearInterval(buttonIntervalId)
-      clearInterval(headerIntervalId)
+      clearInterval(subtitleIntervalId)
     }
-  }, [buttonTexts.length, headerTexts.length])
+  }, [buttonTexts.length])
 
   const scrollToSearch = () => {
     const searchElement = document.getElementById("search-section")
@@ -104,27 +93,21 @@ export default function Hero() {
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           )}
         >
-          {/* Enhanced Heading with Animation Effect */}
-          <div className="overflow-hidden mb-4">
-            <h1
-              className={cn(
-                "text-4xl md:text-6xl lg:text-7xl font-bold leading-tight",
-                "transition-all duration-500 ease-in-out transform",
-                headerVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
-                isLightMode ? "text-gray-900" : "text-white"
-              )}
-            >
-              {headerTexts[headerTextIndex] || t("hero.title")}
-            </h1>
+          {/* Static Logo - Smaller Size */}
+          <div className="mb-6 flex justify-center">
+            <img 
+              src="/images/logo.png" 
+              alt="Company Logo" 
+              className="h-20 md:h-32 lg:h-40 w-auto"
+            />
           </div>
-
 
           {/* Tagline with Appear Effect */}
           <p
             className={cn(
               "text-sm md:text-base font-light italic mb-8",
               "transition-all duration-700",
-              isLoaded ? "opacity-100" : "opacity-0",
+              subtitleVisible ? "opacity-100" : "opacity-0",
               isLightMode ? "text-gray-700" : "text-white/90"
             )}
           >

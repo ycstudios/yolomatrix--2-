@@ -95,7 +95,11 @@ export default function Navbar() {
       )}
     >
       <div className="container mx-auto h-full px-4 flex items-center justify-between transition-all">
-        <Logo className="flex items-center" colorMode={currentTheme} />
+        {/* Balanced approach to logo sizing - smaller but still visible */}
+        <div className="flex items-center">
+        <Logo className="w-[120px] h-auto" />
+
+        </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 transition-all">
