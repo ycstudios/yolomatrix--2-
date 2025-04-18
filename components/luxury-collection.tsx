@@ -9,8 +9,9 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { useTheme } from "next-themes"
 import BenefitsSection from './BenefitsSection'
-
 import UserExperienceGrid from './UserExperienceGrid'
+import ConciergeCard from './ConciergeCard'
+
 interface LuxuryItem {
   id: string
   title: string
@@ -55,12 +56,6 @@ export default function LuxuryCollection() {
       title: t("category.cars"),
       image: "/images/cars.jpeg",
       href: "/cars",
-    },
-    {
-      id: "concierge",
-      title: t("category.concierge"),
-      image: "/images/Concierge/concierge-security-maryland_J6L0f0D.avif",
-      href: "/concierge",
     },
   ]
   
@@ -167,17 +162,19 @@ export default function LuxuryCollection() {
   }
   
   // Handle next image in carousel
-  const handleNextImage = () => {
+  const handleNextImage = (e) => {
+    if (e) e.preventDefault();
     setCurrentImageIndex((prevIndex) => 
       prevIndex === destinations[activeTab].gallery.length - 1 ? 0 : prevIndex + 1
-    )
+    );
   }
   
   // Handle previous image in carousel
-  const handlePrevImage = () => {
+  const handlePrevImage = (e) => {
+    if (e) e.preventDefault();
     setCurrentImageIndex((prevIndex) => 
       prevIndex === 0 ? destinations[activeTab].gallery.length - 1 : prevIndex - 1
-    )
+    );
   }
   
   // Handle gallery image click
@@ -216,6 +213,8 @@ export default function LuxuryCollection() {
       ))}
     </div>
     
+
+    
     <div className="mt-12 text-center">
       <Link href="/rentals">
         <button className="inline-flex items-center px-6 py-3 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-400 dark:hover:text-black transition-colors">
@@ -223,8 +222,17 @@ export default function LuxuryCollection() {
         </button>
       </Link>
     </div>
+
+        {/* Concierge Card Component */}
+        <div className="mt-12">
+      <ConciergeCard />
+    </div>
+
+
   </div>
 </section>
+
+
       
       {/* REDUCED Featured Destination Section */}
       <section className="py-12 bg-white dark:bg-gray-900 overflow-hidden">
@@ -286,22 +294,16 @@ export default function LuxuryCollection() {
 
             {/* Carousel Navigation Buttons */}
             <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePrevImage();
-              }}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none"
+              onClick={handlePrevImage}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full opacity-70 group-hover:opacity-100 transition-opacity focus:outline-none z-10"
               aria-label="Previous image"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             
             <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                handleNextImage();
-              }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none"
+              onClick={handleNextImage}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full opacity-70 group-hover:opacity-100 transition-opacity focus:outline-none z-10"
               aria-label="Next image"
             >
               <ChevronRight className="h-5 w-5" />
@@ -473,6 +475,7 @@ export default function LuxuryCollection() {
     <UserExperienceGrid />
   </div>
 </section>
+
 
     </>
   )

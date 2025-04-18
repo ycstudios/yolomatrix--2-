@@ -10,7 +10,8 @@ import { useTheme } from "next-themes"
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [buttonTextIndex, setButtonTextIndex] = useState(0)
-  const [subtitleVisible, setSubtitleVisible] = useState(true)
+  const [logoScale, setLogoScale] = useState(2) // Start with zoomed in logo (2x size)
+  const [showButton, setShowButton] = useState(false) // New state for button visibility
   const { t, getButtonTexts } = useLanguage()
   const { theme, resolvedTheme } = useTheme()
   const isLightMode = theme === "light" || resolvedTheme === "light"
@@ -19,6 +20,37 @@ export default function Hero() {
 
   useEffect(() => {
     setIsLoaded(true)
+    
+    // Start the logo animation after the component mounts
+    const logoAnimationTimeout = setTimeout(() => {
+      // Animate the logo scale back to normal (1) over 10 seconds
+      const startTime = Date.now()
+      const duration = 10000 // 10 seconds in milliseconds
+      const initialScale = 2
+      const targetScale = 1
+      
+      const animateLogo = () => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min(elapsed / duration, 1)
+        
+        // Calculate current scale using easeOutCubic easing function for smooth animation
+        const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
+        const currentScale = initialScale - (initialScale - targetScale) * easeOutCubic(progress)
+        
+        setLogoScale(currentScale)
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateLogo)
+        } else {
+          // Animation is complete, show the button
+          setShowButton(true)
+        }
+      }
+      
+      requestAnimationFrame(animateLogo)
+    }, 100) // Small delay to ensure component is fully mounted
+    
+    return () => clearTimeout(logoAnimationTimeout)
   }, [])
 
   useEffect(() => {
@@ -27,22 +59,9 @@ export default function Hero() {
       setButtonTextIndex((prevIndex) => (prevIndex + 1) % buttonTexts.length)
     }, 5000)
 
-    // Set up subtitle rotation with fade effect
-    const subtitleIntervalId = setInterval(() => {
-      // Fade out subtitle
-      setSubtitleVisible(false)
-      
-      setTimeout(() => {
-        // Fade in subtitle with slight delay
-        setSubtitleVisible(true)
-      }, 500) // Wait for fade out before showing again
-      
-    }, 5000)
-
-    // Cleanup intervals on unmount
+    // Cleanup interval on unmount
     return () => {
       clearInterval(buttonIntervalId)
-      clearInterval(subtitleIntervalId)
     }
   }, [buttonTexts.length])
 
@@ -93,33 +112,25 @@ export default function Hero() {
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           )}
         >
-          {/* Static Logo - Smaller Size */}
+          {/* Logo with Zoom-out Effect */}
           <div className="mb-6 flex justify-center">
             <img 
               src="/images/logo.png" 
               alt="Company Logo" 
-              className="h-20 md:h-32 lg:h-40 w-auto"
+              className="h-32 md:h-48 lg:h-64 w-auto transition-transform duration-300 ease-out"
+              style={{ 
+                transform: `scale(${logoScale})`,
+                transformOrigin: 'center center'
+              }}
             />
           </div>
 
-          {/* Tagline with Appear Effect */}
-          <p
-            className={cn(
-              "text-sm md:text-base font-light italic mb-8",
-              "transition-all duration-700",
-              subtitleVisible ? "opacity-100" : "opacity-0",
-              isLightMode ? "text-gray-700" : "text-white/90"
-            )}
-          >
-            {t("hero.tagline")}
-          </p>
-
-          {/* Button Section with Enhanced Animation */}
+          {/* Button Section with Enhanced Animation - Now only appears after logo animation */}
           <div 
             className={cn(
               "flex flex-col sm:flex-row items-center justify-center gap-4 mt-8",
-              "transition-all duration-700",
-              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              "transition-all duration-1000",
+              showButton ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
             )}
           >
             <Button

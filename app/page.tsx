@@ -4,6 +4,7 @@ import LuxuryCollection from "@/components/luxury-collection"
 import WhyChooseUs from "@/components/why-choose-us"
 import Footer from "@/components/footer"
 import FloatingActions from "@/components/floating-actions"
+import ClientShowcase from '@/components/ClientShowcase'
 
 export default function Home() {
   return (
@@ -12,8 +13,10 @@ export default function Home() {
       <SearchForm />
       <LuxuryCollection />
       <WhyChooseUs />
+      <ClientShowcase/>
       <Footer />
       <FloatingActions />
+
     </main>
   )
 }
