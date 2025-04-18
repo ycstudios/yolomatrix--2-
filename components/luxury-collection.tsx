@@ -223,13 +223,24 @@ export default function LuxuryCollection() {
       </Link>
     </div>
 
-        {/* Concierge Card Component */}
-        <div className="mt-12">
+          {/* Concierge Card Component with Added Heading */}
+    <div className="mt-16">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900 dark:text-white">
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Personal Concierge Service
+          </span>
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Experience unparalleled luxury with our dedicated concierge team ready to fulfill your every request
+        </p>
+      </div>
       <ConciergeCard />
     </div>
-
-
   </div>
+
+
+
 </section>
 
 
