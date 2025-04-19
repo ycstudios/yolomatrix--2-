@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import FloatingActions from "@/components/floating-actions"
@@ -8,9 +8,11 @@ import CategoryFilter from "@/components/category-filter"
 import CategoryItem, { type CategoryItemProps } from "@/components/category-item"
 import { useLanguage } from "@/contexts/language-context"
 import Footer from "@/components/footer"
+import { useSpring, animated, config } from "react-spring"
+import { motion } from "framer-motion"
 
 // Mock data for concierge services
-const conciergeData: CategoryItemProps[] = [
+export const conciergeData: CategoryItemProps[] = [
   {
     id: "private-events",
     title: "Private Event Planning",
@@ -20,7 +22,7 @@ const conciergeData: CategoryItemProps[] = [
     location: "Global",
     rating: 4.9,
     reviews: 42,
-    images: ["/placeholder.svg?height=800&width=1200"],
+    images: ["/images/package/event.jpeg"],
     amenities: ["staff", "security"],
     featured: true,
     categoryType: "concierge",
@@ -34,7 +36,7 @@ const conciergeData: CategoryItemProps[] = [
     location: "Paris, Milan, New York",
     rating: 4.8,
     reviews: 36,
-    images: ["/placeholder.svg?height=800&width=1200"],
+    images: ["/images/package/shop.jpg"],
     amenities: ["staff"],
     categoryType: "concierge",
   },
@@ -47,7 +49,7 @@ const conciergeData: CategoryItemProps[] = [
     location: "Global",
     rating: 4.9,
     reviews: 58,
-    images: ["/placeholder.svg?height=800&width=1200"],
+    images: ["/images/package/chif.jpg"],
     amenities: ["staff"],
     categoryType: "concierge",
   },
@@ -61,7 +63,7 @@ const conciergeData: CategoryItemProps[] = [
     location: "Mediterranean, Caribbean",
     rating: 4.7,
     reviews: 29,
-    images: ["/placeholder.svg?height=800&width=1200"],
+    images: ["/images/package/yetchs.jpg"],
     amenities: ["staff", "security"],
     categoryType: "concierge",
   },
@@ -74,7 +76,7 @@ const conciergeData: CategoryItemProps[] = [
     location: "Europe, Asia",
     rating: 4.8,
     reviews: 45,
-    images: ["/placeholder.svg?height=800&width=1200"],
+    images: ["/images/package/tour.jpg"],
     amenities: ["staff"],
     categoryType: "concierge",
   },
@@ -87,7 +89,7 @@ const conciergeData: CategoryItemProps[] = [
     location: "Bali, Maldives, Switzerland",
     rating: 4.9,
     reviews: 38,
-    images: ["/placeholder.svg?height=800&width=1200"],
+    images: ["/images/package/shanti.jpg"],
     amenities: ["staff"],
     categoryType: "concierge",
   },
@@ -96,12 +98,65 @@ const conciergeData: CategoryItemProps[] = [
 export default function ConciergePage() {
   const { t } = useLanguage()
   const [filteredServices, setFilteredServices] = useState<CategoryItemProps[]>(conciergeData)
+  const [scrollY, setScrollY] = useState(0)
+  const heroRef = useRef<HTMLElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  
   const [filters, setFilters] = useState({
     priceRange: [0, 10000],
     amenities: [] as string[],
     locations: [] as string[],
     sortBy: "recommended",
   })
+
+  // Hero animation values based on scroll position
+  const [{ scale, blur, opacity, gradientOpacity, translateY }, setHeroSpring] = useSpring(() => ({
+    scale: 1,
+    blur: 0,
+    opacity: 1,
+    gradientOpacity: 0.6,
+    translateY: 0,
+    config: { mass: 1, tension: 280, friction: 60 }
+  }))
+
+  // Handle scroll events with passive listener for performance
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrollY(currentScrollY)
+      
+      // Calculate animation values based on scroll
+      const heroHeight = heroRef.current?.offsetHeight || 0
+      const scrollProgress = Math.min(currentScrollY / (heroHeight * 0.8), 1)
+      
+      // Set spring values for animations
+      setHeroSpring({
+        scale: 1 + (scrollProgress * 0.3), // Max zoom 1.3x
+        blur: scrollProgress * 2,
+        opacity: 1 - (scrollProgress * 0.3),
+        gradientOpacity: 0.6 + (scrollProgress * 0.2),
+        translateY: currentScrollY * 0.2 // Parallax effect
+      })
+    }
+
+    // Add scroll listener with passive option for better performance
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    
+    // Initial calculation
+    handleScroll()
+    
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [setHeroSpring])
+
+  // Auto-play video when component mounts
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Video autoplay prevented:", error);
+        // Could add a play button here if autoplay is blocked
+      });
+    }
+  }, [])
 
   useEffect(() => {
     let filtered = [...conciergeData]
@@ -144,26 +199,104 @@ export default function ConciergePage() {
     setFilters(newFilters)
   }
 
+  // Text animation variants for staggered animation
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: custom * 0.2,
+        duration: 0.8,
+        ease: [0.215, 0.61, 0.355, 1]
+      }
+    })
+  }
+
   return (
-    <main className="min-h-screen">
-      {/* Hero Banner */}
-      <section className="relative h-[50vh] w-full">
-        <Image
-          src="/placeholder.svg?height=1080&width=1920"
-          alt={t("category.concierge")}
-          fill
-          className="object-cover"
-          priority
+    <main className="min-h-screen pt-0">
+      {/* Hero Banner with Video Background */}
+      <section ref={heroRef} className="relative h-[80vh] sm:h-[60vh] md:h-[70vh] w-full overflow-hidden">
+        <animated.div
+          style={{
+            transform: scale.to(s => `scale(${s})`),
+            filter: blur.to(b => `blur(${b}px)`),
+          }}
+          className="absolute inset-0 w-full h-full"
+        >
+          {/* Video Background */}
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="absolute w-full h-full object-cover"
+          >
+            <source src="/images/Concierge/Bespoke Concierge Services Demo Video (1).mp4" type="video/mp4" />
+            {/* Fallback if video doesn't load */}
+            <Image
+              src="/images/Concierge/fallback.jpg"
+              alt="Background"
+              fill
+              className="object-cover"
+            />
+          </video>
+        </animated.div>
+        
+        {/* Overlay */}
+        <animated.div 
+          style={{ 
+            opacity: gradientOpacity 
+          }}
+          className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
-        <div className="absolute inset-0 flex items-center justify-center text-center">
+        
+        {/* Content */}
+        <animated.div 
+          style={{ 
+            opacity,
+            transform: translateY.to(y => `translateY(${y}px)`)
+          }}
+          className="absolute inset-0 flex items-center justify-center text-center"
+        >
           <div className="max-w-4xl px-4">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{t("category.concierge")}</h1>
-            <p className="text-lg md:text-xl text-gray-200 mb-6 max-w-3xl mx-auto">
+            <motion.h1 
+              custom={0}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+              className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-md"
+            >
+              {t("category.concierge")}
+            </motion.h1>
+            
+            <motion.p 
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+              className="text-lg md:text-xl text-gray-200 mb-6 max-w-3xl mx-auto drop-shadow-sm"
+            >
               Exclusive concierge services tailored to your every need and desire.
-            </p>
+            </motion.p>
+            
+            <motion.div
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+            >
+              <Button 
+                size="lg"
+                className="bg-white text-black hover:bg-gray-100 transition-all"
+              >
+                Explore Now
+              </Button>
+            </motion.div>
           </div>
-        </div>
+        </animated.div>
       </section>
 
       {/* Concierge Content */}
@@ -186,8 +319,21 @@ export default function ConciergePage() {
 
               {filteredServices.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {filteredServices.map((service) => (
-                    <CategoryItem key={service.id} {...service} />
+                  {filteredServices.map((service, index) => (
+                    <motion.div 
+                      key={service.id} 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ 
+                        delay: index * 0.1,
+                        duration: 0.5,
+                        ease: "easeOut"
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      className="transition-shadow duration-300 hover:shadow-lg rounded-xl overflow-hidden"
+                    >
+                      <CategoryItem {...service} />
+                    </motion.div>
                   ))}
                 </div>
               ) : (

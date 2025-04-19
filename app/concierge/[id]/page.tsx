@@ -5,7 +5,7 @@ import FloatingActions from "@/components/floating-actions"
 import CategoryDetail from "@/components/category-detail"
 
 // Mock data for a specific concierge service
-const conciergeData = {
+export const conciergeData = {
   id: "private-events",
   title: "Private Event Planning",
   description: "Bespoke event planning service for exclusive parties, celebrations, and corporate gatherings.",

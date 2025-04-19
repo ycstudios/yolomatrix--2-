@@ -30,19 +30,19 @@ export default function LuxuryCollection() {
     {
       id: "mansions",
       title: t("category.mansions"),
-      image: "/images/mansions.avif",
+      image: "/images/mansions.jpg",
       href: "/mansions",
     },
     {
       id: "apartments",
       title: t("category.apartments"),
-      image: "/images/Apartments.jpg",
+      image: "/images/Apartments.avif",
       href: "/apartments",
     },
     {
       id: "yachts",
       title: t("category.yachts"),
-      image: "/images/yachts.jpg",
+      image: "/images/yachts.webp",
       href: "/yachts",
     },
     {
@@ -54,7 +54,7 @@ export default function LuxuryCollection() {
     {
       id: "cars",
       title: t("category.cars"),
-      image: "/images/cars.jpeg",
+      image: "/images//cars.webp",
       href: "/cars",
     },
   ]

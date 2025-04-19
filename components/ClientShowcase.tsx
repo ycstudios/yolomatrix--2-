@@ -6,16 +6,13 @@ import { useTheme } from "next-themes"
 
 // Sample client data - replace with your actual clients
 const clientsData = [
-  { id: 1, name: "Company One", logo: "/images/clients/client1.svg" },
-  { id: 2, name: "Company Two", logo: "/images/clients/client2.svg" },
-  { id: 3, name: "Company Three", logo: "/images/clients/client3.svg" },
-  { id: 4, name: "Company Four", logo: "/images/clients/client4.svg" },
-  { id: 5, name: "Company Five", logo: "/images/clients/client5.svg" },
-  { id: 6, name: "Company Six", logo: "/images/clients/client6.svg" },
-  { id: 7, name: "Company Seven", logo: "/images/clients/client7.svg" },
-  { id: 8, name: "Company Eight", logo: "/images/clients/client8.svg" },
-  { id: 9, name: "Company Nine", logo: "/images/clients/client9.svg" },
-  { id: 10, name: "Company Ten", logo: "/images/clients/client10.svg" },
+  { id: 1, name: "Company One", logo: "/images/clinet/logo-1-color.png" },
+  { id: 2, name: "Company Two", logo: "/images/clinet/logo-2-color.png" },
+  { id: 3, name: "Company Three", logo: "/images/clinet/logo-3-color.png" },
+  { id: 4, name: "Company Four", logo: "/images/clinet/logo-4-color.png"},
+  { id: 5, name: "Company Five", logo: "/images/clinet/logo-5-color.png" },
+  { id: 6, name: "Company Six", logo: "/images/clinet/logo-6-color.png"},
+
 ];
 
 export default function ClientShowcase() {
