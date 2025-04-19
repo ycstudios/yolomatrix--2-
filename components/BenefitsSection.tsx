@@ -30,13 +30,38 @@ const benefits = [
   }
 ];
 
+// Particle component for floating particles
+const Particle = ({ index, isDarkMode }) => {
+  const style = {
+    left: `${Math.random() * 100}%`,
+    animationDelay: `${index * 0.2}s`,
+    animationDuration: `${10 + Math.random() * 10}s`,
+  };
+  
+  return (
+    <div 
+      className={`absolute w-2 h-2 rounded-full animate-float ${
+        isDarkMode ? 'bg-blue-400/30' : 'bg-yellow-300/30'
+      }`}
+      style={style}
+    />
+  );
+};
+
 const BenefitsSection = () => {
   const [inView, setInView] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [zoomScale, setZoomScale] = useState(1);
   const sectionRef = useRef(null);
-  const { theme } = useTheme();  // Get theme from context
-  const isDarkMode = theme === 'dark';  // Determine mode from theme context
+  const videoRef = useRef(null);
+  const playTimeoutRef = useRef(null);
+  const zoomTimeoutRef = useRef(null);
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   useEffect(() => {
+    let lastScroll = window.scrollY;
+    
     const observer = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
       { threshold: 0.2 }
@@ -45,37 +70,151 @@ const BenefitsSection = () => {
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
+
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      const video = videoRef.current;
+      
+      if (video) {
+        // Check if we're scrolling and the section is in view
+        if (currentScroll !== lastScroll && inView) {
+          // Clear any existing timeout
+          if (playTimeoutRef.current) {
+            clearTimeout(playTimeoutRef.current);
+          }
+
+          // Start playing the video
+          video.play();
+
+          // Stop the video after 5 seconds
+          playTimeoutRef.current = setTimeout(() => {
+            video.pause();
+          }, 5000);
+        }
+
+        // Restart video from beginning if we're at the end
+        if (video.ended) {
+          video.currentTime = 0;
+        }
+      }
+
+      lastScroll = currentScroll;
+    };
+
+    const handleMouseMove = (e) => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        setMousePosition({
+          x: (e.clientX - rect.left) / rect.width,
+          y: (e.clientY - rect.top) / rect.height,
+        });
+      }
+    };
+
+    // Zoom in and out effect
+    const startZoomEffect = () => {
+      if (inView) {
+        const zoomIn = () => {
+          setZoomScale(1.1);
+          zoomTimeoutRef.current = setTimeout(() => {
+            setZoomScale(1);
+            zoomTimeoutRef.current = setTimeout(zoomIn, 5000);
+          }, 5000);
+        };
+        zoomIn();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    if (sectionRef.current) {
+      sectionRef.current.addEventListener('mousemove', handleMouseMove);
+    }
+
+    if (inView) {
+      startZoomEffect();
+    }
     
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
+        sectionRef.current.removeEventListener('mousemove', handleMouseMove);
       }
+      if (playTimeoutRef.current) {
+        clearTimeout(playTimeoutRef.current);
+      }
+      if (zoomTimeoutRef.current) {
+        clearTimeout(zoomTimeoutRef.current);
+      }
+      window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [inView]);
 
   return (
     <section
       ref={sectionRef}
-      className={`py-8 md:py-10 relative overflow-hidden ${
-        isDarkMode ? "bg-gray-950" : "bg-gray-50"
-      }`}
+      className="py-8 md:py-10 relative overflow-hidden bg-transparent"
     >
-      {/* Background */}
+      {/* Background wrapper with zoom effect */}
       <div 
-        className={`absolute inset-0 ${
-          isDarkMode 
-            ? "bg-gradient-to-br from-gray-900 to-blue-950" 
-            : "bg-gradient-to-br from-white to-blue-50"
-        }`}
-      />
-      
-      {/* Decorative elements */}
-      <div className={`absolute -top-12 -left-12 w-32 h-32 rounded-full blur-xl opacity-20 ${
-        isDarkMode ? "bg-blue-500" : "bg-blue-200"
-      }`}></div>
-      <div className={`absolute -bottom-12 -right-12 w-32 h-32 rounded-full blur-xl opacity-20 ${
-        isDarkMode ? "bg-indigo-500" : "bg-indigo-200"
-      }`}></div>
+        className="absolute inset-0 transition-transform duration-5000 ease-in-out"
+        style={{ transform: `scale(${zoomScale})` }}
+      >
+        {/* Video Background */}
+        <video
+          ref={videoRef}
+          className={`absolute inset-0 w-full h-full object-cover ${
+            isDarkMode ? "opacity-40" : "opacity-60"
+          }`}
+          src="/Video/bg-video.mp4"
+          loop
+          muted
+          playsInline
+        >
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Floating Particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(30)].map((_, i) => (
+            <Particle key={i} index={i} isDarkMode={isDarkMode} />
+          ))}
+        </div>
+
+        {/* Dynamic Gradient Overlay */}
+        <div 
+          className={`absolute inset-0 transition-opacity duration-500 ${
+            isDarkMode 
+              ? "bg-gradient-to-br from-gray-900/40 via-transparent to-blue-900/40" 
+              : "bg-gradient-to-br from-white/30 via-transparent to-yellow-200/30"
+          }`}
+          style={{
+            opacity: inView ? 0.8 : 0.4,
+          }}
+        />
+
+        {/* Moving Gradient based on mouse position */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, ${
+              isDarkMode ? 'rgba(59, 130, 246, 0.15)' : 'rgba(250, 204, 21, 0.15)'
+            } 0%, transparent 50%)`,
+          }}
+        />
+
+        {/* Geometric patterns */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className={`absolute top-20 left-10 w-32 h-32 border-2 rounded-full ${
+            isDarkMode ? 'border-blue-500' : 'border-yellow-400'
+          } animate-spin-slow`} />
+          <div className={`absolute bottom-20 right-10 w-48 h-48 border-2 ${
+            isDarkMode ? 'border-purple-500' : 'border-orange-400'
+          } animate-pulse`} />
+          <div className={`absolute top-1/2 left-1/3 w-24 h-24 border-2 rotate-45 ${
+            isDarkMode ? 'border-cyan-400' : 'border-pink-400'
+          } animate-bounce-slow`} />
+        </div>
+      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div 
@@ -100,10 +239,10 @@ const BenefitsSection = () => {
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className={`rounded-lg p-4 transition-all duration-300 hover:shadow-md ${
+              className={`group rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:scale-105 ${
                 isDarkMode 
-                  ? "bg-gray-800/80 border border-gray-700 hover:bg-gray-800" 
-                  : "bg-white border border-gray-100 shadow-sm hover:border-gray-200"
+                  ? "bg-gray-900/70 border border-gray-700 hover:bg-gray-900/80 hover:border-blue-500/30" 
+                  : "bg-white/80 border border-gray-100 shadow-sm hover:border-yellow-400/30"
               } ${
                 inView ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
               }`}
@@ -111,7 +250,7 @@ const BenefitsSection = () => {
                 transitionDelay: `${index * 75}ms`
               }}
             >
-              <div className={`rounded-full p-2 inline-flex mb-3 ${
+              <div className={`rounded-full p-2 inline-flex mb-3 transition-transform duration-300 group-hover:scale-110 ${
                 isDarkMode 
                   ? "bg-blue-900/50 text-blue-300" 
                   : "bg-blue-50 text-blue-600"
@@ -128,10 +267,48 @@ const BenefitsSection = () => {
               }`}>
                 {benefit.description}
               </p>
+              
+              {/* Hover effect indicator */}
+              <div className={`absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${
+                isDarkMode ? "bg-blue-500/50" : "bg-yellow-400/50"
+              }`} />
             </div>
           ))}
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0) rotate(45deg); }
+          50% { transform: translateY(-10px) rotate(45deg); }
+        }
+        
+        .animate-float {
+          animation: float linear infinite;
+        }
+        
+        .animate-spin-slow {
+          animation: spin-slow 20s linear infinite;
+        }
+        
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
+        
+        .duration-5000 {
+          transition-duration: 5000ms;
+        }
+      `}</style>
     </section>
   );
 };

@@ -12,7 +12,6 @@ const clientsData = [
   { id: 4, name: "Company Four", logo: "/images/clinet/logo-4-color.png"},
   { id: 5, name: "Company Five", logo: "/images/clinet/logo-5-color.png" },
   { id: 6, name: "Company Six", logo: "/images/clinet/logo-6-color.png"},
-
 ];
 
 export default function ClientShowcase() {
@@ -32,7 +31,7 @@ export default function ClientShowcase() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gray-900 dark:text-white">
-            Our Trusted <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Clients</span>
+            Our Trusted <span className="bg-gradient-to-r from-blue-900 to-blue-800 bg-clip-text text-transparent">Clients</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Partnering with industry leaders to deliver exceptional luxury experiences worldwide
@@ -47,16 +46,19 @@ export default function ClientShowcase() {
                 key={`${client.id}-${index}`}
                 className="flex-shrink-0 w-48 md:w-64 mx-6 flex items-center justify-center"
               >
-                <div className="h-24 md:h-28 w-48 md:w-56 relative bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 transition-all duration-300 hover:shadow-md">
+                <div className="h-24 md:h-28 w-48 md:w-56 relative bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 transition-all duration-300 hover:shadow-md border-b-2 border-blue-900">
                   <Image
                     src={client.logo}
                     alt={client.name}
                     fill
-                    className="object-contain p-2 opacity-80 hover:opacity-100 transition-opacity"
+                    className="object-contain p-2 opacity-90 hover:opacity-100 transition-opacity"
                     onError={(e) => {
                       // Fallback for missing images
                       const target = e.target as HTMLImageElement;
                       target.src = "/api/placeholder/180/90";
+                    }}
+                    style={{
+                      filter: "brightness(0.6) contrast(1.2) saturate(1.1) hue-rotate(210deg)"
                     }}
                   />
                 </div>
