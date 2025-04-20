@@ -1,13 +1,9 @@
 "use client"
 
 import React, { useRef, useEffect, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
 import { Calendar, ShoppingBag, ChefHat, Anchor, Map, Heart } from "lucide-react"
-import { useLanguage } from "@/contexts/language-context"
 
 export default function ConciergeCard() {
-  const { t } = useLanguage()
   const scrollContainerRef = useRef(null)
   const [isPaused, setIsPaused] = useState(false)
 
@@ -97,7 +93,7 @@ export default function ConciergeCard() {
 
   return (
     <div className="w-full bg-gray-100 dark:bg-gray-950 p-2 md:p-8">
-      {/* Mobile Version Card - IMPROVED LAYOUT WITH AUTO-SCROLLING */}
+      {/* Mobile Version Card - Unchanged */}
       <div className="md:hidden w-full">
         <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg text-white">
           <div className="p-5">
@@ -190,11 +186,11 @@ export default function ConciergeCard() {
             
             {/* CTA Section */}
             <div className="mt-4 pt-4 border-t border-gray-700/50">
-              <Link href="/concierge" className="w-full">
+              <a href="/concierge" className="w-full">
                 <button className="w-full py-3 bg-gradient-to-r from-amber-100 to-amber-200 text-gray-900 rounded text-sm font-medium transition-all duration-300 hover:from-amber-200 hover:to-amber-300">
                   Start Your Journey with Us
                 </button>
-              </Link>
+              </a>
               
               <p className="text-[11px] text-center mt-2.5 text-gray-400/80">
                 A concierge specialist is ready to assist you 24/7
@@ -204,7 +200,7 @@ export default function ConciergeCard() {
         </div>
       </div>
       
-      {/* Desktop Version Card - Unchanged */}
+      {/* Desktop Version Card - Fixed Layout */}
       <div className="hidden md:block">
         <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-xl text-white">
           <div className="grid grid-cols-12">
@@ -212,7 +208,7 @@ export default function ConciergeCard() {
             <div className="col-span-4 p-8">
               <h2 className="text-3xl font-serif text-amber-100 mb-4">Your Private Concierge, Redefined</h2>
               
-              <p className="text-sm mb-8">
+              <p className="text-sm text-gray-300 mb-8">
                 Luxury is not just service — It's anticipation. Our concierge team crafts seamless experiences, tailored to your every desire.
               </p>
               
@@ -222,39 +218,40 @@ export default function ConciergeCard() {
                     <div className="w-4 h-4 rounded-full bg-amber-900/20 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-amber-300" />
                     </div>
-                    <span className="text-sm">{feature.title}</span>
+                    <span className="text-sm text-gray-300">{feature.title}</span>
                   </div>
                 ))}
               </div>
-              
-              <h3 className="text-2xl font-serif text-amber-100">Signature Services</h3>
             </div>
             
             {/* Right Section */}
             <div className="col-span-8 p-8">
+              {/* Signature Services heading at the top */}
+              <h3 className="text-2xl font-serif text-amber-100 mb-8">Signature Services</h3>
+              
               <div className="grid grid-cols-2 gap-8">
                 {services.map((service, index) => (
                   <div key={index} className="flex space-x-3">
-                    <div className="rounded-full p-2 bg-amber-900/20 h-10 w-10 flex items-center justify-center">
+                    <div className="rounded-full p-2 bg-amber-900/20 h-10 w-10 flex items-center justify-center flex-shrink-0">
                       <service.icon className="h-5 w-5 text-amber-300" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-amber-100">{service.title}</h4>
-                      <p className="text-xs text-gray-400">{service.description}</p>
+                      <h4 className="text-base font-medium text-amber-100">{service.title}</h4>
+                      <p className="text-sm text-gray-400">{service.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
               
-              <div className="mt-8 flex justify-center">
-                <Link href="/concierge" className="inline-block">
-                  <button className="px-8 py-3 bg-amber-100 text-gray-900 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-amber-200">
+              <div className="mt-12 flex justify-center">
+                <a href="/concierge" className="inline-block">
+                  <button className="px-10 py-4 bg-amber-100 text-gray-900 rounded-lg text-base font-semibold transition-all duration-300 hover:bg-amber-200">
                     Start Your Journey with Us
                   </button>
-                </Link>
+                </a>
               </div>
               
-              <p className="text-xs text-center mt-4 text-gray-400">
+              <p className="text-xs text-center mt-6 text-gray-400">
                 A concierge specialist is ready to assist you 24/7
               </p>
             </div>
