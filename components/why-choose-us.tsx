@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
     }
 
     // Set up interval to switch features
-    const interval = setInterval(cycleFeatures, 5000) // Change feature every 5 seconds
+    const interval = setInterval(cycleFeatures, 1000) // Changed from 5000 to 2000 (2 seconds)
     
     // Cleanup interval on component unmount
     return () => clearInterval(interval)
