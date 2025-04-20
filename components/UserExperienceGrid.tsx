@@ -195,79 +195,89 @@ function UserExperienceSection() {
         ${isTransitioning ? 'scale-95 opacity-90' : 'scale-100 opacity-100'}
       `}
     >
-      <div className="relative h-40 sm:h-48 w-full">
-        <Image src={review.destinationImages[0]} alt={review.destination} fill className="object-cover" priority />
-        <div className="absolute i bg-gray-50 dark:bg-gray-950"></div>
-        
+ <div className="relative h-40 sm:h-48 w-full">
+  <Image src={review.destinationImages[0]} alt={review.destination} fill className="object-cover" priority />
+  <div className="absolute i bg-gray-50 dark:bg-gray-950"></div>
+  
+  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+    <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+      <div className="bg-white dark:bg-gray-700 p-1.5 rounded-full shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+        </svg>
+      </div>
+    </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+    <div className="flex gap-1 sm:gap-2 mb-1.5 sm:mb-2 flex-wrap">
+      <div className="px-2 py-1 bg-blue-600 text-white rounded-full text-xs font-medium inline-flex items-center shadow-md">
+        <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
+        {review.destination}
+      </div>
+      <div className="px-2 py-1 bg-indigo-500 text-white rounded-full text-xs font-medium inline-flex shadow-md">
+        {review.trip}
+      </div>
+    </div>
+    <h4 className="font-bold text-white text-sm sm:text-base lg:text-lg drop-shadow-md tracking-tight">{review.hotelName}</h4>
+  </div>
+</div>
 
-        <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
-    <div className="bg-white dark:bg-gray-700 p-1.5 rounded-full shadow-md">
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
-  <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
-  <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
-  <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
-  <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
-</svg>
+<div className="p-3 sm:p-4 md:p-5">
+  <div className="flex items-center justify-between mb-3 sm:mb-4">
+    <div className="flex items-center">
+      <div className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full overflow-hidden mr-2 sm:mr-3 ring-2 ring-blue-200 dark:ring-blue-900 border-2 border-white dark:border-gray-800">
+        <Image src={review.avatar} alt={review.name} fill className="object-cover" />
+      </div>
+      <div>
+        <div className="flex items-center">
+          <h4 className="font-semibold text-gray-900 dark:text-white text-xs sm:text-sm">{review.name}</h4>
+          {/* Blue verification tick - now on the right side of name */}
+          <div className="ml-1.5 bg-blue-500 rounded-full p-0.5 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 text-white">
+              <path fillRule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clipRule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400">{review.location}</p>
+      </div>
+    </div>
+    
+    <div className="flex bg-yellow-50 dark:bg-yellow-900/20 px-2 py-0.5 rounded-full shadow-sm">
+      {/* 5 stars rating */}
+      <div className="flex items-center">
+        {[...Array(5)].map((_, i) => (
+          <Star key={i} className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-yellow-500 fill-yellow-500 mr-0.5 last:mr-0" />
+        ))}
+      </div>
     </div>
   </div>
-
-          <div className="flex gap-1 sm:gap-2 mb-1.5 sm:mb-2 flex-wrap">
-            <div className="px-2 py-1 bg-blue-600 text-white rounded-full text-xs font-medium inline-flex items-center shadow-md">
-              <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
-              {review.destination}
-            </div>
-            <div className="px-2 py-1 bg-indigo-500 text-white rounded-full text-xs font-medium inline-flex shadow-md">
-              {review.trip}
-            </div>
-          </div>
-          <h4 className="font-bold text-white text-sm sm:text-base lg:text-lg drop-shadow-md tracking-tight">{review.hotelName}</h4>
-        </div>
+  
+  <p className="text-gray-700 dark:text-gray-300 line-clamp-3 mb-3 sm:mb-4 text-xs sm:text-sm leading-relaxed">
+    "{review.shortReview}"
+  </p>
+  
+  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex items-center space-x-2 sm:space-x-3">
+      <div className="flex items-center">
+        <Clock className="h-3 w-3 mr-1 text-blue-600 dark:text-blue-400" />
+        <span>{review.duration}</span>
       </div>
-      
-      <div className="p-3 sm:p-4 md:p-5">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <div className="flex items-center">
-            <div className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full overflow-hidden mr-2 sm:mr-3 ring-2 ring-blue-200 dark:ring-blue-900 border-2 border-white dark:border-gray-800">
-              <Image src={review.avatar} alt={review.name} fill className="object-cover" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white text-xs sm:text-sm">{review.name}</h4>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{review.location}</p>
-            </div>
-          </div>
-          
-          <div className="flex bg-yellow-50 dark:bg-yellow-900/20 px-2 py-0.5 rounded-full shadow-sm">
-            <span className="text-yellow-600 dark:text-yellow-400 font-medium text-xs mr-1">{review.rating}.0</span>
-            <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-yellow-500 fill-yellow-500" />
-          </div>
-        </div>
-        
-        <p className="text-gray-700 dark:text-gray-300 line-clamp-3 mb-3 sm:mb-4 text-xs sm:text-sm leading-relaxed">
-          "{review.shortReview}"
-        </p>
-        
-        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="flex items-center">
-              <Clock className="h-3 w-3 mr-1 text-blue-600 dark:text-blue-400" />
-              <span>{review.duration}</span>
-            </div>
-            <div className="flex items-center">
-              <Users className="h-3 w-3 mr-1 text-blue-600 dark:text-blue-400" />
-              <span>{review.travelers}</span>
-            </div>
-          </div>
-          <div className="flex ml-2">
-            <span className="text-blue-600 dark:text-blue-400 font-medium flex items-center text-xs hover:underline">
-              Read more
-              <ChevronRight className="h-3 w-3 ml-1" />
-            </span>
-          </div>
-        </div>
+      <div className="flex items-center">
+        <Users className="h-3 w-3 mr-1 text-blue-600 dark:text-blue-400" />
+        <span>{review.travelers}</span>
       </div>
     </div>
+    <div className="flex ml-2">
+      <span className="text-blue-600 dark:text-blue-400 font-medium flex items-center text-xs hover:underline">
+        Read more
+        <ChevronRight className="h-3 w-3 ml-1" />
+      </span>
+    </div>
+  </div>
+</div>
+</div>
   );
 
   // QuoteIcon component

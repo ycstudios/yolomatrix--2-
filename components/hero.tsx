@@ -73,7 +73,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <section className="relative w-full overflow-hidden h-[90vh] sm:h-screen">
       {/* Video Background */}
       <div className={cn(
         "absolute inset-0 w-full h-full",
@@ -117,7 +117,7 @@ export default function Hero() {
             <img 
               src="/images/logo.png" 
               alt="Company Logo" 
-              className="h-32 md:h-48 lg:h-64 w-auto transition-transform duration-300 ease-out"
+              className="h-24 sm:h-32 md:h-48 lg:h-64 w-auto transition-transform duration-300 ease-out"
               style={{ 
                 transform: `scale(${logoScale})`,
                 transformOrigin: 'center center'
@@ -128,7 +128,7 @@ export default function Hero() {
           {/* Button Section with Enhanced Animation - Now only appears after logo animation */}
           <div 
             className={cn(
-              "flex flex-col sm:flex-row items-center justify-center gap-4 mt-8",
+              "flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 sm:mt-8",
               "transition-all duration-1000",
               showButton ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
             )}
@@ -154,11 +154,11 @@ export default function Hero() {
           size="icon"
           onClick={scrollToSearch}
           className={cn(
-            "absolute bottom-8 animate-bounce rounded-full",
+            "absolute bottom-4 sm:bottom-8 animate-bounce rounded-full",
             isLightMode ? "text-blue-800" : "text-white"
           )}
         >
-          <ChevronDown className="h-8 w-8" />
+          <ChevronDown className="h-6 w-6 sm:h-8 sm:w-8" />
           <span className="sr-only">Scroll Down</span>
         </Button>
       </div>
