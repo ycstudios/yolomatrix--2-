@@ -26,6 +26,31 @@ export default function ClientShowcase() {
   // Create duplicate data for seamless infinite scroll
   const duplicatedClients = [...clientsData, ...clientsData];
   
+  // Add custom CSS for the marquee animation
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      
+      .animate-marquee {
+        animation: scroll 20s linear infinite;
+      }
+      
+      .animate-marquee:hover {
+        animation-play-state: paused;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+  
   return (
     <section className="py-12 bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4">

@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
     }
 
     // Set up interval to switch features
-    const interval = setInterval(cycleFeatures, 1000) // Changed from 5000 to 2000 (2 seconds)
+    const interval = setInterval(cycleFeatures, 1500) // Changed from 5000 to 2000 (2 seconds)
     
     // Cleanup interval on component unmount
     return () => clearInterval(interval)
@@ -79,7 +79,7 @@ export default function WhyChooseUs() {
           muted 
           playsInline
         >
-          <source src="/Video/WhatsApp Video 2025-04-18 at 9.31.51 PM.mp4" type="video/mp4" />
+          <source src="/Video/why.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>

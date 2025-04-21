@@ -34,13 +34,13 @@ export default function LuxuryCollection() {
     {
       id: "mansions",
       title: t("category.mansions"),
-      image: "/images/mansions.jpg",
+      image: "/images/mansions_img/Mansions_img1.jpeg",
       href: "/mansions",
     },
     {
       id: "apartments",
       title: t("category.apartments"),
-      image: "/images/Apartments.avif",
+      image: "/images/2.png",
       href: "/apartments",
     },
     {
@@ -58,7 +58,7 @@ export default function LuxuryCollection() {
     {
       id: "cars",
       title: t("category.cars"),
-      image: "/images//cars.webp",
+      image: "/images/cars1.jpeg",
       href: "/cars",
     },
   ]
