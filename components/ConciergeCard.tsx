@@ -68,7 +68,7 @@ export default function ConciergeCard() {
             scrollPosition = 0
           }
         }
-      }, 60) // Adjust speed here (lower number = faster)
+      }, 40) // Adjust speed here (lower number = faster)
     }
 
     startScrolling()
@@ -93,10 +93,14 @@ export default function ConciergeCard() {
 
   return (
     <div className="w-full bg-gray-100 dark:bg-gray-950 p-2 md:p-8">
-      {/* Mobile Version Card - Unchanged */}
+      {/* Mobile Version Card */}
       <div className="md:hidden w-full">
-        <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg text-white">
-          <div className="p-5">
+        <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg text-white relative">
+          {/* Background Image with Overlay for Mobile */}
+          <div className="absolute inset-0 bg-[url('/packagebg.jpeg')] bg-cover bg-center" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/90 to-gray-900/75" />
+          
+          <div className="relative p-5">
             {/* Header Section */}
             <h2 className="text-lg font-serif text-amber-100 mb-2 leading-snug">
               Your Private Concierge, Redefined
@@ -147,16 +151,16 @@ export default function ConciergeCard() {
                 {services.map((service, index) => (
                   <div 
                     key={index} 
-                    className="w-56 flex space-x-3 bg-gray-800/30 p-3 rounded-lg flex-shrink-0 cursor-pointer hover:bg-gray-800/50 transition-colors"
+                    className="w-56 flex space-x-3 bg-gray-800/40 backdrop-blur-sm p-3 rounded-lg flex-shrink-0 cursor-pointer hover:bg-gray-800/60 transition-colors"
                   >
-                    <div className="rounded-full p-2 bg-amber-900/20 h-8 w-8 flex items-center justify-center flex-shrink-0">
+                    <div className="rounded-full p-2 bg-amber-900/30 h-8 w-8 flex items-center justify-center flex-shrink-0">
                       <service.icon className="h-4 w-4 text-amber-300" />
                     </div>
                     <div>
                       <h4 className="text-xs font-medium text-amber-100 leading-snug mb-1">
                         {service.title}
                       </h4>
-                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                      <p className="text-[11px] text-gray-300 leading-relaxed">
                         {service.description}
                       </p>
                     </div>
@@ -166,16 +170,16 @@ export default function ConciergeCard() {
                 {services.map((service, index) => (
                   <div 
                     key={`duplicate-${index}`} 
-                    className="w-56 flex space-x-3 bg-gray-800/30 p-3 rounded-lg flex-shrink-0 cursor-pointer hover:bg-gray-800/50 transition-colors"
+                    className="w-56 flex space-x-3 bg-gray-800/40 backdrop-blur-sm p-3 rounded-lg flex-shrink-0 cursor-pointer hover:bg-gray-800/60 transition-colors"
                   >
-                    <div className="rounded-full p-2 bg-amber-900/20 h-8 w-8 flex items-center justify-center flex-shrink-0">
+                    <div className="rounded-full p-2 bg-amber-900/30 h-8 w-8 flex items-center justify-center flex-shrink-0">
                       <service.icon className="h-4 w-4 text-amber-300" />
                     </div>
                     <div>
                       <h4 className="text-xs font-medium text-amber-100 leading-snug mb-1">
                         {service.title}
                       </h4>
-                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                      <p className="text-[11px] text-gray-300 leading-relaxed">
                         {service.description}
                       </p>
                     </div>
@@ -192,7 +196,7 @@ export default function ConciergeCard() {
                 </button>
               </a>
               
-              <p className="text-[11px] text-center mt-2.5 text-gray-400/80">
+              <p className="text-[11px] text-center mt-2.5 text-gray-400/90">
                 A concierge specialist is ready to assist you 24/7
               </p>
             </div>
@@ -200,10 +204,14 @@ export default function ConciergeCard() {
         </div>
       </div>
       
-      {/* Desktop Version Card - Fixed Layout */}
+      {/* Desktop Version Card */}
       <div className="hidden md:block">
-        <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-xl text-white">
-          <div className="grid grid-cols-12">
+        <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-xl text-white relative">
+          {/* Background Image with Overlay for Desktop */}
+          <div className="absolute inset-0 bg-[url('/packagebg.jpeg')] bg-cover bg-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/95 to-gray-900/85" />
+          
+          <div className="relative grid grid-cols-12">
             {/* Left Section */}
             <div className="col-span-4 p-8">
               <h2 className="text-3xl font-serif text-amber-100 mb-4">Your Private Concierge, Redefined</h2>
@@ -215,7 +223,7 @@ export default function ConciergeCard() {
               <div className="grid grid-cols-2 gap-y-4 mb-8">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-center space-x-2">
-                    <div className="w-4 h-4 rounded-full bg-amber-900/20 flex items-center justify-center">
+                    <div className="w-4 h-4 rounded-full bg-amber-900/30 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-amber-300" />
                     </div>
                     <span className="text-sm text-gray-300">{feature.title}</span>
@@ -231,13 +239,13 @@ export default function ConciergeCard() {
               
               <div className="grid grid-cols-2 gap-8">
                 {services.map((service, index) => (
-                  <div key={index} className="flex space-x-3">
-                    <div className="rounded-full p-2 bg-amber-900/20 h-10 w-10 flex items-center justify-center flex-shrink-0">
+                  <div key={index} className="flex space-x-3 bg-gray-800/40 backdrop-blur-sm p-4 rounded-lg hover:bg-gray-800/60 transition-colors">
+                    <div className="rounded-full p-2 bg-amber-900/30 h-10 w-10 flex items-center justify-center flex-shrink-0">
                       <service.icon className="h-5 w-5 text-amber-300" />
                     </div>
                     <div>
                       <h4 className="text-base font-medium text-amber-100">{service.title}</h4>
-                      <p className="text-sm text-gray-400">{service.description}</p>
+                      <p className="text-sm text-gray-300">{service.description}</p>
                     </div>
                   </div>
                 ))}

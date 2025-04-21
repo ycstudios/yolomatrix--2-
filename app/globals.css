@@ -129,3 +129,24 @@ body {
     animation: marquee-reverse 45s linear infinite;
   }
 }
+/* Correct way to reference images from the public folder */
+.some-selector {
+  background-image: url('/packagebg.jpeg');
+}
+
+/* Or if you're using it in a CSS custom property */
+:root {
+  --background-image: url('/packagebg.jpeg');
+}
+
+/* If you're using it in a media query */
+@media (min-width: 768px) {
+  .desktop-background {
+    background-image: url('/packagebg.jpeg');
+  }
+}
+
+/* If you're using it in a hover state */
+.element:hover {
+  background-image: url('/packagebg.jpeg');
+}
