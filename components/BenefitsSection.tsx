@@ -51,11 +51,9 @@ const Particle = ({ index, isDarkMode }) => {
 const BenefitsSection = () => {
   const [inView, setInView] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [zoomScale, setZoomScale] = useState(1);
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const playTimeoutRef = useRef(null);
-  const zoomTimeoutRef = useRef(null);
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
 
@@ -111,27 +109,9 @@ const BenefitsSection = () => {
       }
     };
 
-    // Zoom in and out effect
-    const startZoomEffect = () => {
-      if (inView) {
-        const zoomIn = () => {
-          setZoomScale(1.1);
-          zoomTimeoutRef.current = setTimeout(() => {
-            setZoomScale(1);
-            zoomTimeoutRef.current = setTimeout(zoomIn, 5000);
-          }, 5000);
-        };
-        zoomIn();
-      }
-    };
-
     window.addEventListener('scroll', handleScroll);
     if (sectionRef.current) {
       sectionRef.current.addEventListener('mousemove', handleMouseMove);
-    }
-
-    if (inView) {
-      startZoomEffect();
     }
     
     return () => {
@@ -142,9 +122,6 @@ const BenefitsSection = () => {
       if (playTimeoutRef.current) {
         clearTimeout(playTimeoutRef.current);
       }
-      if (zoomTimeoutRef.current) {
-        clearTimeout(zoomTimeoutRef.current);
-      }
       window.removeEventListener('scroll', handleScroll);
     };
   }, [inView]);
@@ -152,29 +129,32 @@ const BenefitsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-8 md:py-10 relative overflow-hidden bg-transparent"
+      className={`py-8 md:py-10 relative overflow-hidden ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}
     >
-      {/* Background wrapper with zoom effect */}
-      <div 
-        className="absolute inset-0 transition-transform duration-5000 ease-in-out"
-        style={{ transform: `scale(${zoomScale})` }}
-      >
-        {/* Video Background */}
-        <video
-          ref={videoRef}
-          className={`absolute inset-0 w-full h-full object-cover ${
-            isDarkMode ? "opacity-40" : "opacity-60"
-          }`}
-          src="/Video/bg-video.mp4"
-          loop
-          muted
-          playsInline
-        >
-          Your browser does not support the video tag.
-        </video>
+      {/* Video at the top of the section - Full Width */}
+      <div className="mb-8">
+        <div className="relative w-full h-48 md:h-64 lg:h-80">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            src="/Video/bg-video.mp4"
+            loop
+            muted
+            playsInline
+          >
+            Your browser does not support the video tag.
+          </video>
+          {/* Optional gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-900/50" />
+        </div>
+      </div>
 
+      {/* Background effects (now behind the content) */}
+      <div className="absolute inset-0 pointer-events-none">
         {/* Floating Particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden">
           {[...Array(30)].map((_, i) => (
             <Particle key={i} index={i} isDarkMode={isDarkMode} />
           ))}
@@ -188,22 +168,22 @@ const BenefitsSection = () => {
               : "bg-gradient-to-br from-white/30 via-transparent to-yellow-200/30"
           }`}
           style={{
-            opacity: inView ? 0.8 : 0.4,
+            opacity: inView ? 0.3 : 0.2,
           }}
         />
 
         {/* Moving Gradient based on mouse position */}
         <div 
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0"
           style={{
             background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, ${
-              isDarkMode ? 'rgba(59, 130, 246, 0.15)' : 'rgba(250, 204, 21, 0.15)'
+              isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(250, 204, 21, 0.1)'
             } 0%, transparent 50%)`,
           }}
         />
 
         {/* Geometric patterns */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0 opacity-10">
           <div className={`absolute top-20 left-10 w-32 h-32 border-2 rounded-full ${
             isDarkMode ? 'border-blue-500' : 'border-yellow-400'
           } animate-spin-slow`} />
@@ -241,8 +221,8 @@ const BenefitsSection = () => {
               key={index}
               className={`group rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:scale-105 ${
                 isDarkMode 
-                  ? "bg-gray-900/70 border border-gray-700 hover:bg-gray-900/80 hover:border-blue-500/30" 
-                  : "bg-white/80 border border-gray-100 shadow-sm hover:border-yellow-400/30"
+                  ? "bg-gray-800/90 border border-gray-700 hover:bg-gray-800 hover:border-blue-500/30" 
+                  : "bg-white border border-gray-100 shadow-sm hover:border-yellow-400/30"
               } ${
                 inView ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
               }`}
@@ -303,10 +283,6 @@ const BenefitsSection = () => {
         
         .animate-bounce-slow {
           animation: bounce-slow 3s ease-in-out infinite;
-        }
-        
-        .duration-5000 {
-          transition-duration: 5000ms;
         }
       `}</style>
     </section>

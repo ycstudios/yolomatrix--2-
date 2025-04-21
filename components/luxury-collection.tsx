@@ -69,7 +69,7 @@ export default function LuxuryCollection() {
       tagline: "City of Eternal Spring",
       description: "Nestled in the Aburrá Valley, Medellín boasts year-round spring-like weather, stunning mountain views, and a rich cultural scene. Enjoy vibrant festivals, explore lush parks, and experience the warmth of the 'City of Innovation.'",
       image: "/images/medellin/medellin-large.avif",
-      gallery: ["/images/medellin/medellin-large.avif", "/images/medellin/medellin-1.jpg", "/images/medellin/medellin-2.jpg", "/images/medellin/medellin-3.webp"],
+      gallery: ["/images/medellin/medellin-large.avif", "/images/medellin/medellin-1.jpg", "/images/medellin/medellin-2.jpg", "/images/medellin/medellin-3.webp","/images/medellin/medellin-5.jpg","/images/medellin/medellin-4.webp"],
       activities: ["City Tours", "Coffee Farm Visits", "Cable Car Rides", "Botanical Gardens"],
       price: "$1,499",
       duration: "5 nights",
