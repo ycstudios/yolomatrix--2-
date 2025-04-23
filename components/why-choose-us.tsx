@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { 
-  Award, Shield, Clock, Users, Globe, Sparkles
+  Award, Shield, Clock, Users, Globe, Sparkles,
+  ChevronLeft, ChevronRight
 } from "lucide-react"
 
 export default function WhyChooseUs() {
@@ -11,32 +12,32 @@ export default function WhyChooseUs() {
 
   const features = [
     {
-      icon: <Award className="h-6 w-6 text-amber-500" />,
+      icon: <Award className="h-6 w-6 text-blue-500" />,
       title: "Unmatched Quality",
       description: "Finest properties, vehicles, and experiences curated for you.",
     },
     {
-      icon: <Shield className="h-6 w-6 text-amber-500" />,
+      icon: <Shield className="h-6 w-6 text-blue-500" />,
       title: "Absolute Privacy",
       description: "Confidential bookings & secure arrangements.",
     },
     {
-      icon: <Clock className="h-6 w-6 text-amber-500" />,
+      icon: <Clock className="h-6 w-6 text-blue-500" />,
       title: "24/7 Concierge",
       description: "We're available anytime, anywhere, for anything.",
     },
     {
-      icon: <Users className="h-6 w-6 text-amber-500" />,
+      icon: <Users className="h-6 w-6 text-blue-500" />,
       title: "Personalized Service",
       description: "Bespoke luxury tailored to your preferences.",
     },
     {
-      icon: <Globe className="h-6 w-6 text-amber-500" />,
+      icon: <Globe className="h-6 w-6 text-blue-500" />,
       title: "Global Presence",
       description: "Access luxury around the world.",
     },
     {
-      icon: <Sparkles className="h-6 w-6 text-amber-500" />,
+      icon: <Sparkles className="h-6 w-6 text-blue-500" />,
       title: "Exceptional Experiences",
       description: "Unforgettable moments you won't find anywhere else.",
     },
@@ -59,13 +60,34 @@ export default function WhyChooseUs() {
     }
 
     // Set up interval to switch features
-    const interval = setInterval(cycleFeatures, 1500) // Changed from 5000 to 2000 (2 seconds)
+    const interval = setInterval(cycleFeatures, 2000) // Changed from 5000 to 2000 (2 seconds)
     
     // Cleanup interval on component unmount
     return () => clearInterval(interval)
   }, [features.length])
 
   const currentFeature = features[currentFeatureIndex]
+
+  // Navigation functions
+  const goToPrevious = () => {
+    setIsAnimating(true)
+    setTimeout(() => {
+      setCurrentFeatureIndex(prevIndex => 
+        prevIndex === 0 ? features.length - 1 : prevIndex - 1
+      )
+      setIsAnimating(false)
+    }, 500)
+  }
+
+  const goToNext = () => {
+    setIsAnimating(true)
+    setTimeout(() => {
+      setCurrentFeatureIndex(prevIndex => 
+        prevIndex === features.length - 1 ? 0 : prevIndex + 1
+      )
+      setIsAnimating(false)
+    }, 500)
+  }
 
   return (
     <section className="py-6 relative overflow-hidden">
@@ -87,36 +109,59 @@ export default function WhyChooseUs() {
       {/* Content */}
       <div className="relative z-30 max-w-3xl mx-auto px-3 sm:px-4">
         <div className="text-center mb-4">
-          <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent mb-2" />
+          <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent mb-2" />
           <h2 className="text-xl md:text-2xl font-light text-white tracking-wide">
             Why Choose Us
           </h2>
-          <p className="text-xs text-amber-100/80 mt-1 font-light tracking-wider">
+          <p className="text-xs text-blue-100/80 mt-1 font-light tracking-wider">
             Discover a better way to experience luxury.
           </p>
-          <div className="mx-auto w-12 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent mt-2" />
+          <div className="mx-auto w-12 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent mt-2" />
         </div>
 
-        {/* Single Feature Card with Pop-up Effect */}
+        {/* Feature Card with Navigation Buttons */}
         <div className="relative h-40 flex items-center justify-center">
+          {/* Left Navigation Button */}
+          <button 
+            onClick={goToPrevious}
+            className="absolute left-0 z-40 h-full px-2 flex items-center justify-center group"
+            aria-label="Previous feature"
+          >
+            <div className="p-2 rounded-full bg-black/30 backdrop-blur-sm border border-blue-200/10 text-blue-100/70 hover:text-blue-200 hover:bg-black/40 transition-all duration-300 group-hover:scale-110">
+              <ChevronLeft className="h-4 w-4" />
+            </div>
+          </button>
+
+          {/* Feature Card Content */}
           <div 
             className={`feature-card w-full max-w-sm mx-auto bg-black/40 backdrop-blur-md 
-                       border border-amber-200/20 text-white p-4 rounded-lg shadow-lg
+                       border border-blue-200/20 text-white p-4 rounded-lg shadow-lg
                        transition-all duration-500 ease-in-out
                        ${isAnimating ? 'feature-exit' : 'feature-enter'}`}
           >
             <div className="flex flex-col items-center text-center">
-              <div className="p-2 rounded-full bg-amber-900/20 mb-2">
+              <div className="p-2 rounded-full bg-blue-900/20 mb-2">
                 {currentFeature.icon}
               </div>
               <h3 className="text-sm sm:text-base font-medium tracking-wide mb-1">
                 {currentFeature.title}
               </h3>
-              <p className="text-xs text-amber-100/80 font-light">
+              <p className="text-xs text-blue-100/80 font-light">
                 {currentFeature.description}
               </p>
             </div>
           </div>
+
+          {/* Right Navigation Button */}
+          <button 
+            onClick={goToNext}
+            className="absolute right-0 z-40 h-full px-2 flex items-center justify-center group"
+            aria-label="Next feature"
+          >
+            <div className="p-2 rounded-full bg-black/30 backdrop-blur-sm border border-blue-200/10 text-blue-100/70 hover:text-blue-200 hover:bg-black/40 transition-all duration-300 group-hover:scale-110">
+              <ChevronRight className="h-4 w-4" />
+            </div>
+          </button>
         </div>
 
         {/* Feature Navigation Dots */}
@@ -133,8 +178,8 @@ export default function WhyChooseUs() {
               }}
               className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                 index === currentFeatureIndex 
-                  ? 'bg-amber-500 w-3' 
-                  : 'bg-amber-500/30 hover:bg-amber-500/50'
+                  ? 'bg-blue-500 w-3' 
+                  : 'bg-blue-500/30 hover:bg-blue-500/50'
               }`}
               aria-label={`View feature ${index + 1}`}
             />
@@ -164,13 +209,13 @@ export default function WhyChooseUs() {
           animation: initialPopUp 0.6s ease-out;
           box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.3), 
                      0 6px 8px -4px rgba(0, 0, 0, 0.2),
-                     0 0 10px rgba(245, 158, 11, 0.1);
+                     0 0 10px rgba(59, 130, 246, 0.1);
         }
         
         .feature-card:hover {
           box-shadow: 0 10px 20px -4px rgba(0, 0, 0, 0.4), 
                      0 8px 10px -4px rgba(0, 0, 0, 0.3),
-                     0 0 12px rgba(245, 158, 11, 0.15);
+                     0 0 12px rgba(59, 130, 246, 0.15);
           transform: translateY(-3px);
         }
       `}</style>

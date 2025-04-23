@@ -135,7 +135,7 @@ const BenefitsSection = () => {
     >
       {/* Video at the top of the section - Full Width */}
       <div className="mb-8">
-        <div className="relative w-full h-48 md:h-64 lg:h-80">
+        <div className="relative w-full h-72 md:h-64 lg:h-80">
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover"

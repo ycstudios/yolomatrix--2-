@@ -26,7 +26,7 @@ export default function ClientShowcase() {
   // Create duplicate data for seamless infinite scroll
   const duplicatedClients = [...clientsData, ...clientsData];
   
-  // Add custom CSS for the marquee animation
+  // Add custom CSS for the marquee animation with faster scroll speed
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -40,7 +40,7 @@ export default function ClientShowcase() {
       }
       
       .animate-marquee {
-        animation: scroll 20s linear infinite;
+        animation: scroll 15s linear infinite;
       }
       
       .animate-marquee:hover {
