@@ -351,7 +351,7 @@ export default function LuxuryPackages() {
               className="absolute top-1/2 -left-4 -translate-y-1/2 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-indigo-50 dark:hover:bg-indigo-900 transition-all transform hover:scale-110 active:scale-95"
               aria-label="Previous package"
             >
-              <ChevronLeft size={24} className="text-indigo-700 dark:text-indigo-300" />
+              <ChevronLeft size={14} className="text-indigo-700 dark:text-indigo-300" />
             </button>
             
             <button 
@@ -359,7 +359,7 @@ export default function LuxuryPackages() {
               className="absolute top-1/2 -right-4 -translate-y-1/2 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-indigo-50 dark:hover:bg-indigo-900 transition-all transform hover:scale-110 active:scale-95"
               aria-label="Next package"
             >
-              <ChevronRight size={24} className="text-indigo-700 dark:text-indigo-300" />
+              <ChevronRight size={14} className="text-indigo-700 dark:text-indigo-300" />
             </button>
           </div>
           
