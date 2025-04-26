@@ -320,8 +320,8 @@ export default function LuxuryPackages() {
         </p>
       </div>
       
-      {/* Filter Tabs */}
-      <div className="mb-10 flex flex-wrap justify-center gap-3">
+{/* Filter Tabs */}
+<div className="mb-10 flex flex-wrap justify-center gap-3">
   {filterOptions.map(option => (
     <button
       key={option.id}
@@ -329,7 +329,7 @@ export default function LuxuryPackages() {
       className={`px-6 py-2.5 rounded-full transition-all font-medium ${
         option.icon ? 'flex items-center gap-2' : ''} ${
         activeFilter === option.id
-          ? "bg-gray-100 dark:bg-violet-600 text-gray-900 dark:text-white shadow-md"
+          ? "bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white shadow-md"
           : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 hover:border-violet-300 dark:hover:border-violet-500 hover:bg-violet-50 dark:hover:bg-violet-900/20"
       }`}
     >
@@ -413,179 +413,202 @@ export default function LuxuryPackages() {
       {selectedPackage && (
         <div className="fixed inset-0 bg-indigo-900/90 dark:bg-gray-900/95 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-screen overflow-y-auto shadow-2xl animate-fadeIn">
-            {/* Gallery in modal */}
-            <div className="relative">
-              <div className="relative h-72 md:h-96 overflow-hidden">
-                {/* Darker overlay for better text visibility */}
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/80 to-indigo-900/50 dark:from-gray-900/90 dark:to-gray-900/70 z-10" />
-                <img 
-                  src={selectedPackage.gallery[currentGalleryIndex]} 
-                  alt={`${selectedPackage.title} - image ${currentGalleryIndex + 1}`} 
-                  className="w-full h-full object-cover transition-all duration-500 brightness-90"
-                />
-                
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-                  <LocationBadge location={selectedPackage.location} />
-                  <div className="bg-indigo-900/70 dark:bg-indigo-800/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
-                    <Calendar size={14} className="text-pink-300" />
-                    <span className="text-sm font-medium">{selectedPackage.duration}</span>
-                  </div>
-                </div>
-                
-                <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
-                  <HeartButton id={selectedPackage.id} />
-                  <button 
-                    onClick={() => setSelectedPackage(null)}
-                    className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md hover:bg-white dark:hover:bg-gray-700 transition transform hover:scale-110 active:scale-95"
-                  >
-                    <X size={20} className="text-indigo-700 dark:text-indigo-300" />
-                  </button>
-                </div>
-                
-                {/* Title on image with shadow for improved readability */}
-                <div className="absolute bottom-6 left-6 z-20">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">
-                    {selectedPackage.title}
-                  </h2>
-                  <div className="flex items-center gap-4">
-                    <RatingStars size={20} />
-                    <span className="text-white font-medium drop-shadow-md">
-                      {selectedPackage.reviews.length} reviews
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Gallery navigation */}
-                <button 
-                  onClick={galleryNav.prev}
-                  className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2.5 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-700 transition z-20 transform hover:scale-110 active:scale-95"
-                >
-                  <ChevronLeft size={24} className="text-indigo-700 dark:text-indigo-300" />
-                </button>
-                
-                <button 
-                  onClick={galleryNav.next}
-                  className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2.5 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-700 transition z-20 transform hover:scale-110 active:scale-95"
-                >
-                  <ChevronRight size={24} className="text-indigo-700 dark:text-indigo-300" />
-                </button>
-              </div>
-              
-              {/* Thumbnail gallery */}
-              <div className="flex justify-center gap-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-indigo-950">
-                {selectedPackage.gallery.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => galleryNav.goto(idx)}
-                    className={`w-16 h-12 rounded-lg overflow-hidden transition-all ${
-                      currentGalleryIndex === idx ? 'ring-2 ring-indigo-600 dark:ring-indigo-400 scale-110 shadow-md' : 'opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
-                  </button>
+{/* Gallery in modal */}
+<div className="relative">
+  <div 
+    className="relative h-72 md:h-96 overflow-hidden"
+    onTouchStart={(e) => {
+      const touchStart = e.touches[0].clientX;
+      e.currentTarget.setAttribute('data-touch-start', touchStart);
+    }}
+    onTouchEnd={(e) => {
+      const touchStart = parseFloat(e.currentTarget.getAttribute('data-touch-start') || '0');
+      const touchEnd = e.changedTouches[0].clientX;
+      const diff = touchStart - touchEnd;
+      
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? galleryNav.next() : galleryNav.prev();
+      }
+    }}
+  >
+    {/* Enhanced gradient overlay for better text visibility in both modes */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/70 z-10" />
+    <img 
+      src={selectedPackage.gallery[currentGalleryIndex]} 
+      alt={`${selectedPackage.title} - image ${currentGalleryIndex + 1}`} 
+      className="w-full h-full object-cover transition-all duration-500"
+    />
+    
+    <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+      <LocationBadge location={selectedPackage.location} />
+      <div className="bg-indigo-700/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+        <Calendar size={14} className="text-pink-200" />
+        <span className="text-sm font-medium">{selectedPackage.duration}</span>
+      </div>
+    </div>
+    
+    <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+      <HeartButton id={selectedPackage.id} />
+      <button 
+        onClick={() => setSelectedPackage(null)}
+        className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md hover:bg-white dark:hover:bg-gray-700 transition transform hover:scale-110 active:scale-95"
+      >
+        <X size={20} className="text-indigo-700 dark:text-indigo-300" />
+      </button>
+    </div>
+    
+    {/* Improved title area with better text visibility */}
+    <div className="absolute bottom-0 left-0 right-0 z-20 p-6 bg-gradient-to-t from-black/80 to-transparent">
+      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-[0_2px_3px_rgba(0,0,0,0.8)]">
+        {selectedPackage.title}
+      </h2>
+      <div className="flex items-center gap-4">
+        <RatingStars size={20} />
+        <span className="text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          {selectedPackage.reviews.length} reviews
+        </span>
+      </div>
+    </div>
+    
+    {/* Gallery navigation - visible on non-mobile only */}
+    <button 
+      onClick={galleryNav.prev}
+      className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2.5 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-700 transition z-20 transform hover:scale-110 active:scale-95 hidden md:block"
+    >
+      <ChevronLeft size={24} className="text-indigo-700 dark:text-indigo-300" />
+    </button>
+    
+    <button 
+      onClick={galleryNav.next}
+      className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2.5 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-700 transition z-20 transform hover:scale-110 active:scale-95 hidden md:block"
+    >
+      <ChevronRight size={24} className="text-indigo-700 dark:text-indigo-300" />
+    </button>
+    
+    {/* Swipe indicator - visible on mobile only */}
+    <div className="absolute bottom-24 left-0 right-0 flex justify-center items-center gap-1 md:hidden z-20">
+      <span className="text-white text-xs font-medium px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm shadow-lg">
+        Swipe to navigate
+      </span>
+    </div>
+  </div>
+  
+  {/* Thumbnail gallery */}
+  <div className="flex justify-center gap-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-indigo-950">
+    {selectedPackage.gallery.map((img, idx) => (
+      <button
+        key={idx}
+        onClick={() => galleryNav.goto(idx)}
+        className={`w-16 h-12 rounded-lg overflow-hidden transition-all ${
+          currentGalleryIndex === idx ? 'ring-2 ring-indigo-600 dark:ring-indigo-400 scale-110 shadow-md' : 'opacity-70 hover:opacity-100'
+        }`}
+      >
+        <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+      </button>
+    ))}
+  </div>
+</div>
+<div className="p-6 md:p-8">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {/* Left column: Details */}
+    <div className="md:col-span-2">
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold mb-3 flex items-center gap-2 text-indigo-900 dark:text-indigo-100">
+          <Sparkles size={20} className="text-indigo-600 dark:text-indigo-400" />
+          Experience Details
+        </h3>
+        <p className="text-indigo-800 dark:text-indigo-200 leading-relaxed">{selectedPackage.fullDescription}</p>
+      </div>
+
+    
+    <div className="mb-8">
+      <h3 className="text-xl font-semibold mb-4 text-indigo-900 dark:text-indigo-100">Package Includes:</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {selectedPackage.features.map((feature, idx) => (
+          <FeatureTag key={idx} icon={feature.icon} text={feature.text} />
+        ))}
+      </div>
+    </div>
+    
+    {/* Reviews */}
+    <div>
+      <h3 className="text-xl font-semibold mb-4 text-indigo-900 dark:text-indigo-100">Guest Reviews</h3>
+      <div className="space-y-4">
+        {selectedPackage.reviews.map((review, idx) => (
+          <div key={idx} className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-4 rounded-xl shadow-sm border border-indigo-100 dark:border-indigo-800">
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-medium text-indigo-900 dark:text-indigo-200">{review.name}</span>
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} 
+                    fill={i < review.rating ? "#fbbf24" : "none"} 
+                    stroke={i < review.rating ? "#fbbf24" : "#d1d5db"}
+                  />
                 ))}
               </div>
             </div>
-            
-            <div className="p-6 md:p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Left column: Details */}
-                <div className="md:col-span-2">
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold mb-3 flex items-center gap-2 text-indigo-900 dark:text-indigo-100">
-                      <Sparkles size={20} className="text-indigo-600 dark:text-indigo-400" />
-                      Experience Details
-                    </h3>
-                    <p className="text-indigo-800 dark:text-indigo-200 leading-relaxed">{selectedPackage.fullDescription}</p>
-                  </div>
-                  
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold mb-4 text-indigo-900 dark:text-indigo-100">Package Includes:</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedPackage.features.map((feature, idx) => (
-                        <FeatureTag key={idx} icon={feature.icon} text={feature.text} />
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Reviews */}
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4 text-indigo-900 dark:text-indigo-100">Guest Reviews</h3>
-                    <div className="space-y-4">
-                      {selectedPackage.reviews.map((review, idx) => (
-                        <div key={idx} className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-4 rounded-xl shadow-sm border border-indigo-100 dark:border-indigo-800">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="font-medium text-indigo-900 dark:text-indigo-200">{review.name}</span>
-                            <div className="flex">
-                              {[...Array(5)].map((_, i) => (
-                                <Star key={i} size={16} 
-                                  fill={i < review.rating ? "#fbbf24" : "none"} 
-                                  stroke={i < review.rating ? "#fbbf24" : "#d1d5db"}
-                                  />
-                              ))}
-                            </div>
-                          </div>
-                          <p className="text-indigo-800 dark:text-indigo-300 italic">{review.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Right column: Booking panel */}
-                <div className="md:col-span-1">
-                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-xl p-6 shadow-md sticky top-8 border border-indigo-100 dark:border-indigo-800">
-                    <div className="mb-6">
-                      <div className="text-sm text-indigo-700 dark:text-indigo-300 font-medium mb-1">Starting from</div>
-                      <div className="font-bold text-3xl text-indigo-800 dark:text-indigo-100 mb-1">{selectedPackage.priceDisplay}</div>
-                      <div className="text-sm text-indigo-700 dark:text-indigo-300">per package / {selectedPackage.duration}</div>
-                    </div>
-                    
-                    {/* Booking form */}
-                    <div className="space-y-4 mb-6">
-                      <div>
-                        <label className="block text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1.5">Select Date</label>
-                        <div className="relative">
-                          <input 
-                            type="text" 
-                            placeholder="Select date" 
-                            className="w-full p-3 border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-800 text-indigo-900 dark:text-indigo-100 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 pl-10 shadow-sm"
-                          />
-                          <Calendar className="absolute left-3 top-3.5 text-indigo-400 dark:text-indigo-300" size={18} />
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1.5">Guests</label>
-                        <select className="w-full p-3 border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-800 text-indigo-900 dark:text-indigo-100 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 shadow-sm">
-                          {[1, 2, 3, "4+"].map(num => (
-                            <option key={num}>{num} Guest{num !== 1 ? "s" : ""}</option>
-                          ))}
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1.5">Special Requests</label>
-                        <textarea 
-                          className="w-full p-3 border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-800 text-indigo-900 dark:text-indigo-100 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 shadow-sm"
-                          rows="3"
-                          placeholder="Any special requirements?"
-                        ></textarea>
-                      </div>
-                    </div>
-                 {/* CTA Buttons */}
-                 <div className="space-y-3">
-  <button className="w-full py-3.5 bg-blue-500 text-white font-medium rounded-xl hover:bg-blue-600 shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
-    <Sparkles size={18} />
-    Book This Experience
-  </button>
-  <button className="w-full py-3.5 bg-white dark:bg-gray-800 border border-indigo-300 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200 font-medium rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/40 transition flex items-center justify-center gap-2 transform hover:scale-105 active:scale-95">
-    Contact Concierge
-  </button>
+            <p className="text-indigo-800 dark:text-indigo-300 italic">{review.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+  
+  {/* Right column: Booking panel */}
+  <div className="md:col-span-1">
+    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-xl p-6 shadow-md sticky top-24 border border-indigo-100 dark:border-indigo-800">
+      <div className="mb-6">
+        <div className="text-sm text-indigo-700 dark:text-indigo-300 font-medium mb-1">Starting from</div>
+        <div className="font-bold text-3xl text-indigo-800 dark:text-indigo-100 mb-1">{selectedPackage.priceDisplay}</div>
+        <div className="text-sm text-indigo-700 dark:text-indigo-300">per package / {selectedPackage.duration}</div>
+      </div>
+      
+      {/* Booking form */}
+      <div className="space-y-4 mb-6">
+        <div>
+          <label className="block text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1.5">Select Date</label>
+          <div className="relative">
+            <input 
+              type="text" 
+              placeholder="Select date" 
+              className="w-full p-3 border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-800 text-indigo-900 dark:text-indigo-100 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 pl-10 shadow-sm"
+            />
+            <Calendar className="absolute left-3 top-3.5 text-indigo-400 dark:text-indigo-300" size={18} />
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1.5">Guests</label>
+          <select className="w-full p-3 border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-800 text-indigo-900 dark:text-indigo-100 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 shadow-sm">
+            {[1, 2, 3, "4+"].map(num => (
+              <option key={num}>{num} Guest{num !== 1 ? "s" : ""}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-indigo-800 dark:text-indigo-200 mb-1.5">Special Requests</label>
+          <textarea 
+            className="w-full p-3 border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-800 text-indigo-900 dark:text-indigo-100 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 shadow-sm"
+            rows="3"
+            placeholder="Any special requirements?"
+          ></textarea>
+        </div>
+      </div>
+      
+      {/* CTA Buttons */}
+      <div className="space-y-3">
+        <button className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+          <Sparkles size={18} />
+          Book This Experience
+        </button>
+        <button className="w-full py-3.5 bg-white dark:bg-gray-800 border border-indigo-300 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200 font-medium rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/40 transition flex items-center justify-center gap-2 transform hover:scale-105 active:scale-95">
+          Contact Concierge
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
