@@ -545,7 +545,7 @@ export default function LuxuryPackages() {
                         <span className="font-semibold text-indigo-900 dark:text-indigo-100">{review.name}</span>
                         <RatingStars rating={review.rating} />
                       </div>
-                      <p className="text-indigo-700 dark:text-indigo-300">{review.text}</p>
+                      <p className="text-white dark:text-indigo-300">{review.text}</p>
                     </div>
                   ))}
                 </div>
@@ -554,39 +554,79 @@ export default function LuxuryPackages() {
 
             {/* Right column: Booking & Price info */}
             <div className="w-full md:w-1/3">
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-6 rounded-xl shadow-md border border-indigo-100 dark:border-indigo-800 sticky top-8">
-                <h3 className="text-xl font-semibold mb-4 text-indigo-900 dark:text-indigo-100">Book This Experience</h3>
-                
-                <div className="mb-6">
-                  <div className="text-sm text-indigo-600 dark:text-indigo-300 font-medium">Starting from</div>
-                  <div className="font-bold text-3xl text-indigo-800 dark:text-indigo-100 mb-1">{selectedPackage.priceDisplay}</div>
-                  <div className="text-sm text-indigo-600 dark:text-indigo-400">Per person, all inclusive</div>
-                </div>
-                
-                <button className="w-full mb-4 py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 text-white rounded-lg shadow-md hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-800 dark:hover:to-indigo-800 transition transform hover:scale-105 active:scale-95 font-semibold">
-                  Request Booking
-                </button>
-                
-                <button className="w-full flex justify-center items-center gap-2 py-3 px-6 border border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/50 transition">
-                  <Heart size={18} /> Save to Wishlist
-                </button>
-                
-                <div className="mt-6 space-y-4">
-                  <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300">
-                    <Shield size={20} className="text-green-500" />
-                    <span>Free cancellation up to 14 days before</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300">
-                    <User size={20} className="text-blue-500" />
-                    <span>Dedicated personal concierge</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300">
-                    <Star size={20} className="text-amber-500" />
-                    <span>VIP access to exclusive venues</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-6 rounded-xl shadow-md border border-indigo-100 dark:border-indigo-800 sticky top-8">
+    <h3 className="text-xl font-semibold mb-4 text-indigo-900 dark:text-indigo-100">Book This Experience</h3>
+
+    <div className="mb-6">
+      <div className="text-sm text-indigo-600 dark:text-indigo-300 font-medium">Starting from</div>
+      <div className="font-bold text-3xl text-indigo-800 dark:text-indigo-100 mb-1">{selectedPackage.priceDisplay}</div>
+      <div className="text-sm text-indigo-600 dark:text-indigo-400">Per person, all inclusive</div>
+    </div>
+
+    {/* --- FORM STARTS HERE --- */}
+    <form className="space-y-4 mb-6">
+      
+      {/* Select Date */}
+      <div>
+        <label className="block text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-1">Select Date</label>
+        <input 
+          type="date" 
+          className="w-full p-3 border rounded-lg dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-white"
+        />
+      </div>
+
+      {/* Number of Guests */}
+      <div>
+        <label className="block text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-1">Number of Guests</label>
+        <select 
+          className="w-full p-3 border rounded-lg dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-white"
+        >
+          <option>1 Guest</option>
+          <option>2 Guests</option>
+          <option>3 Guests</option>
+          <option>4 Guests</option>
+          <option>5+ Guests</option>
+        </select>
+      </div>
+
+      {/* Special Requests */}
+      <div>
+        <label className="block text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-1">Special Requests</label>
+        <textarea 
+          rows="3"
+          placeholder="Any special requests?"
+          className="w-full p-3 border rounded-lg dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-white resize-none"
+        />
+      </div>
+
+    </form>
+    {/* --- FORM ENDS HERE --- */}
+
+    <button className="w-full mb-4 py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 text-white rounded-lg shadow-md hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-800 dark:hover:to-indigo-800 transition transform hover:scale-105 active:scale-95 font-semibold">
+      Request Booking
+    </button>
+
+    <button className="w-full flex justify-center items-center gap-2 py-3 px-6 border border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/50 transition">
+      <Heart size={18} /> Save to Wishlist
+    </button>
+
+    <div className="mt-6 space-y-4">
+      <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300">
+        <Shield size={20} className="text-green-500" />
+        <span>Free cancellation up to 14 days before</span>
+      </div>
+      <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300">
+        <User size={20} className="text-blue-500" />
+        <span>Dedicated personal concierge</span>
+      </div>
+      <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300">
+        <Star size={20} className="text-amber-500" />
+        <span>VIP access to exclusive venues</span>
+      </div>
+    </div>
+  </div>
+</div>
+
           </div>
         </div>
       </div>
