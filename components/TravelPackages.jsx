@@ -347,25 +347,24 @@ export default function LuxuryPackages() {
       {/* Mobile Carousel View */}
       {isMobile && filteredPackages.length > 0 && (
         <div className="mb-12">
-          <div className="relative">
+      <div 
+            className="relative"
+            onTouchStart={(e) => {
+              const touchStart = e.touches[0].clientX;
+              e.currentTarget.setAttribute('data-touch-start', touchStart);
+            }}
+            onTouchEnd={(e) => {
+              const touchStart = parseFloat(e.currentTarget.getAttribute('data-touch-start') || '0');
+              const touchEnd = e.changedTouches[0].clientX;
+              const diff = touchStart - touchEnd;
+              
+              if (Math.abs(diff) > 50) {
+                diff > 0 ? carouselNav.next() : carouselNav.prev();
+              }
+            }}
+          >
             <PackageCard pkg={filteredPackages[currentSlide]} isMobile={true} />
-            
-            {/* Carousel navigation */}
-            <button 
-              onClick={carouselNav.prev}
-              className="absolute top-1/2 -left-4 -translate-y-1/2 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-indigo-50 dark:hover:bg-indigo-900 transition-all transform hover:scale-110 active:scale-95"
-              aria-label="Previous package"
-            >
-              <ChevronLeft size={14} className="text-indigo-700 dark:text-indigo-300" />
-            </button>
-            
-            <button 
-              onClick={carouselNav.next}
-              className="absolute top-1/2 -right-4 -translate-y-1/2 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:bg-indigo-50 dark:hover:bg-indigo-900 transition-all transform hover:scale-110 active:scale-95"
-              aria-label="Next package"
-            >
-              <ChevronRight size={14} className="text-indigo-700 dark:text-indigo-300" />
-            </button>
+          
           </div>
           
           {/* Pagination dots */}
