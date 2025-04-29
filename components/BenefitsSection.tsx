@@ -41,7 +41,7 @@ const Particle = ({ index, isDarkMode }) => {
   return (
     <div 
       className={`absolute w-2 h-2 rounded-full animate-float ${
-        isDarkMode ? 'bg-blue-400/30' : 'bg-yellow-300/30'
+        isDarkMode ? 'bg-blue-400/30' : 'bg-blue-300/30'
       }`}
       style={style}
     />
@@ -165,7 +165,7 @@ const BenefitsSection = () => {
           className={`absolute inset-0 transition-opacity duration-500 ${
             isDarkMode 
               ? "bg-gradient-to-br from-gray-900/40 via-transparent to-blue-900/40" 
-              : "bg-gradient-to-br from-white/30 via-transparent to-yellow-200/30"
+              : "bg-gradient-to-br from-white/30 via-transparent to-blue-200/30"
           }`}
           style={{
             opacity: inView ? 0.3 : 0.2,
@@ -177,7 +177,7 @@ const BenefitsSection = () => {
           className="absolute inset-0"
           style={{
             background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, ${
-              isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(250, 204, 21, 0.1)'
+              isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)'
             } 0%, transparent 50%)`,
           }}
         />
@@ -185,13 +185,13 @@ const BenefitsSection = () => {
         {/* Geometric patterns */}
         <div className="absolute inset-0 opacity-10">
           <div className={`absolute top-20 left-10 w-32 h-32 border-2 rounded-full ${
-            isDarkMode ? 'border-blue-500' : 'border-yellow-400'
+            isDarkMode ? 'border-blue-500' : 'border-blue-400'
           } animate-spin-slow`} />
           <div className={`absolute bottom-20 right-10 w-48 h-48 border-2 ${
-            isDarkMode ? 'border-purple-500' : 'border-orange-400'
+            isDarkMode ? 'border-purple-500' : 'border-purple-400'
           } animate-pulse`} />
           <div className={`absolute top-1/2 left-1/3 w-24 h-24 border-2 rotate-45 ${
-            isDarkMode ? 'border-cyan-400' : 'border-pink-400'
+            isDarkMode ? 'border-cyan-400' : 'border-cyan-400'
           } animate-bounce-slow`} />
         </div>
       </div>
@@ -207,7 +207,7 @@ const BenefitsSection = () => {
           }`}>
             Experience Premium Service
           </h2>
-          <div className="w-20 h-1 bg-yellow-500 mx-auto mb-3 rounded-full"></div>
+          <div className="w-20 h-1 bg-blue-500 mx-auto mb-3 rounded-full"></div>
           <p className={`text-sm md:text-base ${
             isDarkMode ? "text-gray-300" : "text-gray-600"
           }`}>
@@ -222,7 +222,7 @@ const BenefitsSection = () => {
               className={`group rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:scale-105 ${
                 isDarkMode 
                   ? "bg-gray-800/90 border border-gray-700 hover:bg-gray-800 hover:border-blue-500/30" 
-                  : "bg-white border border-gray-100 shadow-sm hover:border-yellow-400/30"
+                  : "bg-white border border-gray-100 shadow-sm hover:border-blue-400/30"
               } ${
                 inView ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
               }`}
@@ -250,7 +250,7 @@ const BenefitsSection = () => {
               
               {/* Hover effect indicator */}
               <div className={`absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${
-                isDarkMode ? "bg-blue-500/50" : "bg-yellow-400/50"
+                isDarkMode ? "bg-blue-500/50" : "bg-blue-400/50"
               }`} />
             </div>
           ))}
