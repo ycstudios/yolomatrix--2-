@@ -231,7 +231,7 @@ export default function YachtsPage() {
             playsInline
             preload="auto"
           >
-            <source src="/Video/luxury-yachts.mp4" type="video/mp4" />
+            <source src="/Video/yathch.mp4" type="video/mp4" />
             {/* Fallback image in case video doesn't load */}
             <Image
               src="/images/yachts_img/Yachts_hero.jpg"

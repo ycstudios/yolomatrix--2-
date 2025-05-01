@@ -46,7 +46,7 @@ export default function LuxuryCollection() {
     {
       id: "yachts",
       title: t("category.yachts"),
-      image: "/images/yachts.webp",
+      image: "/yatch.jpg",
       href: "/yachts",
     },
     {
