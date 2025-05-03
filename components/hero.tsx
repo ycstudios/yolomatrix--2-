@@ -10,8 +10,6 @@ import { useTheme } from "next-themes"
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [buttonTextIndex, setButtonTextIndex] = useState(0)
-  const [logoScale, setLogoScale] = useState(2) // Start with zoomed in logo (2x size)
-  const [showButton, setShowButton] = useState(false) // New state for button visibility
   const { t, getButtonTexts } = useLanguage()
   const { theme, resolvedTheme } = useTheme()
   const isLightMode = theme === "light" || resolvedTheme === "light"
@@ -20,37 +18,6 @@ export default function Hero() {
 
   useEffect(() => {
     setIsLoaded(true)
-    
-    // Start the logo animation after the component mounts
-    const logoAnimationTimeout = setTimeout(() => {
-      // Animate the logo scale back to normal (1) over 10 seconds
-      const startTime = Date.now()
-      const duration = 10000 // 10 seconds in milliseconds
-      const initialScale = 2
-      const targetScale = 1
-      
-      const animateLogo = () => {
-        const elapsed = Date.now() - startTime
-        const progress = Math.min(elapsed / duration, 1)
-        
-        // Calculate current scale using easeOutCubic easing function for smooth animation
-        const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
-        const currentScale = initialScale - (initialScale - targetScale) * easeOutCubic(progress)
-        
-        setLogoScale(currentScale)
-        
-        if (progress < 1) {
-          requestAnimationFrame(animateLogo)
-        } else {
-          // Animation is complete, show the button
-          setShowButton(true)
-        }
-      }
-      
-      requestAnimationFrame(animateLogo)
-    }, 100) // Small delay to ensure component is fully mounted
-    
-    return () => clearTimeout(logoAnimationTimeout)
   }, [])
 
   useEffect(() => {
@@ -89,7 +56,7 @@ export default function Hero() {
             isLightMode ? "opacity-80" : "opacity-100"
           )}
         >
-          <source src="/Video/yolo final edits 2.mp4" type="video/webm" />
+          <source src="/Video/yolo final edits 2 (1).mp4" type="video/webm" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -112,25 +79,11 @@ export default function Hero() {
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           )}
         >
-          {/* Logo with Zoom-out Effect */}
-          <div className="mb-6 flex justify-center">
-            <img 
-              src="/images/logo.png" 
-              alt="Company Logo" 
-              className="h-24 sm:h-32 md:h-48 lg:h-64 w-auto transition-transform duration-300 ease-out"
-              style={{ 
-                transform: `scale(${logoScale})`,
-                transformOrigin: 'center center'
-              }}
-            />
-          </div>
-
-          {/* Button Section with Enhanced Animation - Now only appears after logo animation */}
+          {/* Button Section with Enhanced Animation */}
           <div 
             className={cn(
-              "flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 sm:mt-8",
-              "transition-all duration-1000",
-              showButton ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
+              "flex flex-col sm:flex-row items-center justify-center gap-4",
+              "transition-all duration-1000 opacity-100 translate-y-0"
             )}
           >
             <Button
