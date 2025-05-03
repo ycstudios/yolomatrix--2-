@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
@@ -21,12 +20,9 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    // Set up button text rotation every 5 seconds
     const buttonIntervalId = setInterval(() => {
       setButtonTextIndex((prevIndex) => (prevIndex + 1) % buttonTexts.length)
     }, 5000)
-
-    // Cleanup interval on unmount
     return () => {
       clearInterval(buttonIntervalId)
     }
@@ -42,10 +38,12 @@ export default function Hero() {
   return (
     <section className="relative w-full overflow-hidden h-[90vh] sm:h-screen">
       {/* Video Background */}
-      <div className={cn(
-        "absolute inset-0 w-full h-full",
-        isLightMode ? "bg-gray-100" : "bg-black"
-      )}>
+      <div
+        className={cn(
+          "absolute inset-0 w-full h-full",
+          isLightMode ? "bg-gray-100" : "bg-black"
+        )}
+      >
         <video
           autoPlay
           muted
@@ -56,7 +54,7 @@ export default function Hero() {
             isLightMode ? "opacity-80" : "opacity-100"
           )}
         >
-          <source src="/Video/yolo final edits 2 (1).mp4" type="video/webm" />
+          <source src="/Video/yolo final edits 2 (1) (1).mp4" type="video/webm" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -79,41 +77,37 @@ export default function Hero() {
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           )}
         >
-          {/* Button Section with Enhanced Animation */}
-          <div 
-            className={cn(
-              "flex flex-col sm:flex-row items-center justify-center gap-4",
-              "transition-all duration-1000 opacity-100 translate-y-0"
-            )}
-          >
-            <Button
-              size="lg"
-              className={cn(
-                "rounded-full text-white px-8 transition-all duration-300",
-                isLightMode
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg"
-                  : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-lg"
-              )}
-              onClick={() => window.location.href = '/search'}
-            >
-              {buttonTexts[buttonTextIndex] || t("hero.explore")}
-            </Button>
-          </div>
+          {/* You can keep other hero content here if needed */}
         </div>
 
-        {/* Scroll Down Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={scrollToSearch}
-          className={cn(
-            "absolute bottom-4 sm:bottom-8 animate-bounce rounded-full",
-            isLightMode ? "text-blue-800" : "text-white"
-          )}
-        >
-          <ChevronDown className="h-6 w-6 sm:h-8 sm:w-8" />
-          <span className="sr-only">Scroll Down</span>
-        </Button>
+        {/* Bottom Buttons Container */}
+        <div className="absolute bottom-16 sm:bottom-20 flex flex-col items-center space-y-4">
+          <Button
+            size="lg"
+            className={cn(
+              "rounded-full text-white px-8 transition-all duration-300",
+              isLightMode
+                ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg"
+                : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-lg"
+            )}
+            onClick={() => window.location.href = '/search'}
+          >
+            {buttonTexts[buttonTextIndex] || t("hero.explore")}
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={scrollToSearch}
+            className={cn(
+              "animate-bounce rounded-full",
+              isLightMode ? "text-blue-800" : "text-white"
+            )}
+          >
+            <ChevronDown className="h-6 w-6 sm:h-8 sm:w-8" />
+            <span className="sr-only">Scroll Down</span>
+          </Button>
+        </div>
       </div>
     </section>
   )
