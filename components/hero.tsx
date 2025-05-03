@@ -89,7 +89,7 @@ export default function Hero() {
             isLightMode ? "opacity-80" : "opacity-100"
           )}
         >
-          <source src="/assets/HeroVideo.webm" type="video/webm" />
+          <source src="/Video/yolo final edits 2.mp4" type="video/webm" />
           Your browser does not support the video tag.
         </video>
       </div>
