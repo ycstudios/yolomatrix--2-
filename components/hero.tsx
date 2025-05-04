@@ -5,12 +5,12 @@ import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { useTheme } from "next-themes"
+import Image from "next/image"
 
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [buttonTextIndex, setButtonTextIndex] = useState(0)
-  const [fallbackActive, setFallbackActive] = useState(false)
   const videoRef = useRef(null)
   const { t, getButtonTexts } = useLanguage()
   const { theme, resolvedTheme } = useTheme()
@@ -20,25 +20,55 @@ export default function Hero() {
   const videoUrl = "/Video/yolohero.mp4"
   // Image fallback for faster loading and iOS compatibility
   const posterImage = "/images/hero-poster.jpg"
+  // Logo path - replace with your actual logo path
+  const logoPath = "/images/logo.png"
   
   const buttonTexts = getButtonTexts()
   
   useEffect(() => {
     setIsLoaded(true)
     
-    // Optimize video loading
-    const videoElement = videoRef.current
-    if (videoElement) {
-      // Set video attributes for optimal loading
-      videoElement.load()
-      videoElement.setAttribute('playsinline', '')
-      videoElement.setAttribute('muted', '')
-      videoElement.muted = true // Explicit mute for iOS
-      
-      // Force play for iOS
-      document.addEventListener('touchstart', () => {
-        if (videoElement.paused) videoElement.play()
-      }, {once: true})
+    // Preload the video
+    const preloadVideo = () => {
+      const videoElement = videoRef.current
+      if (videoElement) {
+        // Set video attributes for optimal loading
+        videoElement.setAttribute('playsinline', '')
+        videoElement.setAttribute('muted', '')
+        videoElement.setAttribute('preload', 'auto')
+        videoElement.muted = true // Explicit mute for iOS
+        
+        // Set poster for faster initial rendering
+        videoElement.poster = posterImage
+        
+        // Try to load and play immediately
+        videoElement.load()
+        
+        // Attempt to play video as soon as possible
+        const playPromise = videoElement.play().catch(err => {
+          console.log("Auto-play prevented:", err)
+          // Handle auto-play prevention here if needed
+        })
+      }
+    }
+    
+    // Force play for iOS and handle user interaction
+    const handleUserInteraction = () => {
+      const videoElement = videoRef.current
+      if (videoElement && videoElement.paused) {
+        videoElement.play().catch(err => console.log("Play attempt failed:", err))
+      }
+    }
+    
+    preloadVideo()
+    
+    // Add event listeners for user interaction to trigger video playback
+    document.addEventListener('touchstart', handleUserInteraction, {once: true})
+    document.addEventListener('click', handleUserInteraction, {once: true})
+    
+    return () => {
+      document.removeEventListener('touchstart', handleUserInteraction)
+      document.removeEventListener('click', handleUserInteraction)
     }
   }, [])
   
@@ -59,27 +89,36 @@ export default function Hero() {
   }
   
   const handleVideoLoad = () => {
-    setVideoLoaded(true)
+    // Short delay to ensure smooth transition
+    setTimeout(() => {
+      setVideoLoaded(true)
+    }, 300)
   }
   
   return (
     <section className="relative w-full overflow-hidden h-[90vh] sm:h-screen">
-      {/* Loading placeholder */}
-      {!videoLoaded && (
-        <div className={cn(
-          "absolute inset-0 flex items-center justify-center",
-          isLightMode ? "bg-gray-100" : "bg-gray-900"
-        )}>
-          <div className="w-12 h-12 rounded-full border-4 border-t-transparent border-blue-500 animate-spin"></div>
+      {/* Logo Loading State */}
+      <div className={cn(
+        "absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 z-10",
+        isLightMode ? "bg-gray-100" : "bg-gray-900",
+        videoLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
+      )}>
+        <div className="relative w-40 h-40 md:w-56 md:h-56">
+          <Image
+            src={logoPath}
+            alt="Logo"
+            layout="fill"
+            objectFit="contain"
+            priority
+          />
         </div>
-      )}
+      </div>
       
       {/* Video Background with optimization */}
       <div
         className={cn(
           "absolute inset-0 w-full h-full",
           isLightMode ? "bg-gray-100" : "bg-black",
-          !videoLoaded && "opacity-0" // Hide until loaded
         )}
       >
         <video
@@ -88,10 +127,10 @@ export default function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
-          onLoadedData={handleVideoLoad}
+          poster={posterImage}
+          onCanPlayThrough={handleVideoLoad}
           className={cn(
-            "w-full h-full object-cover transition-opacity duration-500",
+            "w-full h-full object-cover transition-opacity duration-700",
             isLightMode ? "opacity-80" : "opacity-100",
             videoLoaded ? "opacity-100" : "opacity-0"
           )}
