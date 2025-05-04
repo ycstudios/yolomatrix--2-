@@ -54,7 +54,7 @@ export default function Hero() {
             isLightMode ? "opacity-80" : "opacity-100"
           )}
         >
-          <source src="/Video/yolo final edits 2 (1) (1).mp4" type="video/webm" />
+          <source src="/Video/yolohero.mp4" type="video/webm" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -82,19 +82,7 @@ export default function Hero() {
 
         {/* Bottom Buttons Container */}
         <div className="absolute bottom-16 sm:bottom-20 flex flex-col items-center space-y-4">
-          <Button
-            size="lg"
-            className={cn(
-              "rounded-full text-white px-8 transition-all duration-300",
-              isLightMode
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg"
-                : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-lg"
-            )}
-            onClick={() => window.location.href = '/search'}
-          >
-            {buttonTexts[buttonTextIndex] || t("hero.explore")}
-          </Button>
-
+=
           <Button
             variant="ghost"
             size="icon"
