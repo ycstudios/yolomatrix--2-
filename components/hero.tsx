@@ -26,19 +26,19 @@ export default function Hero() {
   useEffect(() => {
     setIsLoaded(true)
     
-    // Check for iOS
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-    if (isIOS) {
-      setFallbackActive(true)
-      setVideoLoaded(true) // Skip video loading on iOS
-    }
-    
-    // Preload video for non-iOS
-    if (!isIOS) {
-      const videoElement = videoRef.current
-      if (videoElement) {
-        videoElement.load()
-      }
+    // Optimize video loading
+    const videoElement = videoRef.current
+    if (videoElement) {
+      // Set video attributes for optimal loading
+      videoElement.load()
+      videoElement.setAttribute('playsinline', '')
+      videoElement.setAttribute('muted', '')
+      videoElement.muted = true // Explicit mute for iOS
+      
+      // Force play for iOS
+      document.addEventListener('touchstart', () => {
+        if (videoElement.paused) videoElement.play()
+      }, {once: true})
     }
   }, [])
   
@@ -62,12 +62,6 @@ export default function Hero() {
     setVideoLoaded(true)
   }
   
-  const handleVideoError = () => {
-    console.warn("Video failed to load, using fallback image")
-    setFallbackActive(true)
-    setVideoLoaded(true)
-  }
-  
   return (
     <section className="relative w-full overflow-hidden h-[90vh] sm:h-screen">
       {/* Loading placeholder */}
@@ -88,37 +82,23 @@ export default function Hero() {
           !videoLoaded && "opacity-0" // Hide until loaded
         )}
       >
-        {/* Poster image background - always present */}
-        <div className="absolute inset-0">
-          <img 
-            src={posterImage} 
-            alt="Background" 
-            className="w-full h-full object-cover"
-            loading="eager"
-          />
-        </div>
-        
-        {/* Video only plays if not on iOS and fallback isn't active */}
-        {!fallbackActive && (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster={posterImage}
-            onLoadedData={handleVideoLoad}
-            onError={handleVideoError}
-            className={cn(
-              "w-full h-full object-cover transition-opacity duration-500",
-              isLightMode ? "opacity-80" : "opacity-100"
-            )}
-          >
-            <source src={videoUrl} type="video/mp4" />
-            <source src="/videos/yolohero.webm" type="video/webm" />
-          </video>
-        )}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onLoadedData={handleVideoLoad}
+          className={cn(
+            "w-full h-full object-cover transition-opacity duration-500",
+            isLightMode ? "opacity-80" : "opacity-100",
+            videoLoaded ? "opacity-100" : "opacity-0"
+          )}
+        >
+          <source src={videoUrl} type="video/mp4" />
+          <source src="/Video/yolohero.webm" type="video/webm" />
+        </video>
       </div>
       
       {/* Gradient Overlay */}
