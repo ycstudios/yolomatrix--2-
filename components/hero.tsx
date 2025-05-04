@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -8,17 +8,25 @@ import { useTheme } from "next-themes"
 
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [videoLoaded, setVideoLoaded] = useState(false)
   const [buttonTextIndex, setButtonTextIndex] = useState(0)
+  const videoRef = useRef(null)
   const { t, getButtonTexts } = useLanguage()
   const { theme, resolvedTheme } = useTheme()
   const isLightMode = theme === "light" || resolvedTheme === "light"
-
+  
   const buttonTexts = getButtonTexts()
-
+  
   useEffect(() => {
     setIsLoaded(true)
+    
+    // Preload video
+    const videoElement = videoRef.current
+    if (videoElement) {
+      videoElement.load()
+    }
   }, [])
-
+  
   useEffect(() => {
     const buttonIntervalId = setInterval(() => {
       setButtonTextIndex((prevIndex) => (prevIndex + 1) % buttonTexts.length)
@@ -27,38 +35,58 @@ export default function Hero() {
       clearInterval(buttonIntervalId)
     }
   }, [buttonTexts.length])
-
+  
   const scrollToSearch = () => {
     const searchElement = document.getElementById("search-section")
     if (searchElement) {
       searchElement.scrollIntoView({ behavior: "smooth" })
     }
   }
-
+  
+  const handleVideoLoad = () => {
+    setVideoLoaded(true)
+  }
+  
   return (
     <section className="relative w-full overflow-hidden h-[90vh] sm:h-screen">
-      {/* Video Background */}
+      {/* Loading placeholder */}
+      {!videoLoaded && (
+        <div className={cn(
+          "absolute inset-0 flex items-center justify-center",
+          isLightMode ? "bg-gray-100" : "bg-gray-900"
+        )}>
+          <div className="w-12 h-12 rounded-full border-4 border-t-transparent border-blue-500 animate-spin"></div>
+        </div>
+      )}
+      
+      {/* Video Background with optimization */}
       <div
         className={cn(
           "absolute inset-0 w-full h-full",
-          isLightMode ? "bg-gray-100" : "bg-black"
+          isLightMode ? "bg-gray-100" : "bg-black",
+          !videoLoaded && "opacity-0" // Hide video until loaded
         )}
       >
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
+          onLoadedData={handleVideoLoad}
           className={cn(
-            "w-full h-full object-cover",
-            isLightMode ? "opacity-80" : "opacity-100"
+            "w-full h-full object-cover transition-opacity duration-500",
+            isLightMode ? "opacity-80" : "opacity-100",
+            videoLoaded ? "opacity-100" : "opacity-0"
           )}
+          preload="auto"
         >
           <source src="/Video/yolohero.mp4" type="video/webm" />
+          <source src="/Video/yolohero.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
-
+      
       {/* Gradient Overlay */}
       <div
         className={cn(
@@ -68,7 +96,7 @@ export default function Hero() {
             : "bg-gradient-to-b from-black/60 via-black/30 to-black/70"
         )}
       />
-
+      
       {/* Main Content */}
       <div className="relative h-full flex flex-col items-center justify-center text-center px-4 md:px-8">
         <div
@@ -79,10 +107,9 @@ export default function Hero() {
         >
           {/* You can keep other hero content here if needed */}
         </div>
-
+        
         {/* Bottom Buttons Container */}
         <div className="absolute bottom-16 sm:bottom-20 flex flex-col items-center space-y-4">
-
           <Button
             variant="ghost"
             size="icon"
