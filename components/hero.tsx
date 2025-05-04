@@ -15,6 +15,10 @@ export default function Hero() {
   const { theme, resolvedTheme } = useTheme()
   const isLightMode = theme === "light" || resolvedTheme === "light"
   
+  // Google Drive video URL
+  // Note: This is a direct streaming link transformed from the Google Drive sharing URL
+  const videoUrl = "https://drive.google.com/uc?export=download&id=1DLN7eYEkA2UdfLyS_HP7H0DMwHeD7-Ut"
+  
   const buttonTexts = getButtonTexts()
   
   useEffect(() => {
@@ -81,8 +85,7 @@ export default function Hero() {
           )}
           preload="auto"
         >
-          <source src="/Video/yolohero.mp4" type="video/webm" />
-          <source src="/Video/yolohero.mp4" type="video/mp4" />
+          <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
