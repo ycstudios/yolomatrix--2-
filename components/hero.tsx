@@ -82,7 +82,7 @@ export default function Hero() {
 
         {/* Bottom Buttons Container */}
         <div className="absolute bottom-16 sm:bottom-20 flex flex-col items-center space-y-4">
-=
+
           <Button
             variant="ghost"
             size="icon"
