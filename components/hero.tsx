@@ -10,24 +10,35 @@ export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [buttonTextIndex, setButtonTextIndex] = useState(0)
+  const [fallbackActive, setFallbackActive] = useState(false)
   const videoRef = useRef(null)
   const { t, getButtonTexts } = useLanguage()
   const { theme, resolvedTheme } = useTheme()
   const isLightMode = theme === "light" || resolvedTheme === "light"
   
-  // Google Drive video URL
-  // Note: This is a direct streaming link transformed from the Google Drive sharing URL
-  const videoUrl = "https://drive.google.com/uc?export=download&id=1DLN7eYEkA2UdfLyS_HP7H0DMwHeD7-Ut"
+  // Internal video file path
+  const videoUrl = "/Video/yolohero.mp4"
+  // Image fallback for faster loading and iOS compatibility
+  const posterImage = "/images/hero-poster.jpg"
   
   const buttonTexts = getButtonTexts()
   
   useEffect(() => {
     setIsLoaded(true)
     
-    // Preload video
-    const videoElement = videoRef.current
-    if (videoElement) {
-      videoElement.load()
+    // Check for iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    if (isIOS) {
+      setFallbackActive(true)
+      setVideoLoaded(true) // Skip video loading on iOS
+    }
+    
+    // Preload video for non-iOS
+    if (!isIOS) {
+      const videoElement = videoRef.current
+      if (videoElement) {
+        videoElement.load()
+      }
     }
   }, [])
   
@@ -51,6 +62,12 @@ export default function Hero() {
     setVideoLoaded(true)
   }
   
+  const handleVideoError = () => {
+    console.warn("Video failed to load, using fallback image")
+    setFallbackActive(true)
+    setVideoLoaded(true)
+  }
+  
   return (
     <section className="relative w-full overflow-hidden h-[90vh] sm:h-screen">
       {/* Loading placeholder */}
@@ -68,26 +85,40 @@ export default function Hero() {
         className={cn(
           "absolute inset-0 w-full h-full",
           isLightMode ? "bg-gray-100" : "bg-black",
-          !videoLoaded && "opacity-0" // Hide video until loaded
+          !videoLoaded && "opacity-0" // Hide until loaded
         )}
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          onLoadedData={handleVideoLoad}
-          className={cn(
-            "w-full h-full object-cover transition-opacity duration-500",
-            isLightMode ? "opacity-80" : "opacity-100",
-            videoLoaded ? "opacity-100" : "opacity-0"
-          )}
-          preload="auto"
-        >
-          <source src={videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {/* Poster image background - always present */}
+        <div className="absolute inset-0">
+          <img 
+            src={posterImage} 
+            alt="Background" 
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+        </div>
+        
+        {/* Video only plays if not on iOS and fallback isn't active */}
+        {!fallbackActive && (
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={posterImage}
+            onLoadedData={handleVideoLoad}
+            onError={handleVideoError}
+            className={cn(
+              "w-full h-full object-cover transition-opacity duration-500",
+              isLightMode ? "opacity-80" : "opacity-100"
+            )}
+          >
+            <source src={videoUrl} type="video/mp4" />
+            <source src="/videos/yolohero.webm" type="video/webm" />
+          </video>
+        )}
       </div>
       
       {/* Gradient Overlay */}
