@@ -36,6 +36,8 @@ export const translations = {
     "nav.contact": "Contact",
     "nav.login": "Login",
     "nav.signup": "Sign Up",
+    "language": "Language",
+    "back": "Back",
 
     // Hero
     "hero.title": "Your Gateway to Exclusive Experiences",
@@ -122,6 +124,20 @@ export const translations = {
     "about.cta": "Ready to Experience Luxury?",
     "about.contact": "Contact Us Today",
 
+        "forgotPassword.title": "Forgot Password?",
+    "forgotPassword.description": "Enter your email address and we'll send you a link to reset your password.",
+    "forgotPassword.email": "Email Address",
+    "forgotPassword.emailPlaceholder": "Enter your email",
+    "forgotPassword.resetButton": "Reset Password",
+    "forgotPassword.backToLogin": "Back to Login",
+    "forgotPassword.rememberedPassword": "Remembered your password?",
+    "forgotPassword.signIn": "Sign in",
+    "forgotPassword.needHelp": "Need help?",
+    "forgotPassword.contactSupport": "Contact support",
+    "forgotPassword.checkEmail": "Check Your Email",
+    "forgotPassword.emailSent": "We've sent a password reset link to {email}",
+    "forgotPassword.tryDifferentEmail": "Try a different email",
+
     // Contact Page
     "contact.title": "Contact Us",
     "contact.subtitle": "Our concierge team is available 24/7 to assist you",
@@ -139,6 +155,40 @@ export const translations = {
     "contact.info.email": "Email",
     "contact.info.offices": "Global Offices",
 
+    // Login Page
+    "login.welcome": "Welcome Back",
+    "login.email": "Email Address",
+    "login.emailPlaceholder": "Enter your email",
+    "login.password": "Password",
+    "login.passwordPlaceholder": "Enter your password",
+    "login.forgotPassword": "Forgot Password?",
+    "login.rememberMe": "Remember me",
+    "login.signIn": "Sign In",
+    "login.noAccount": "Don't have an account?",
+    "login.createAccount": "Create Account",
+    "login.orContinueWith": "Or continue with",
+
+    // Signup Page
+    "signup.createAccount": "Create Account",
+    "signup.firstName": "First Name",
+    "signup.lastName": "Last Name",
+    "signup.email": "Email Address",
+    "signup.password": "Password",
+    "signup.confirmPassword": "Confirm Password",
+    "signup.passwordsDoNotMatch": "Passwords don't match",
+    "signup.passwordWeak": "Weak",
+    "signup.passwordMedium": "Medium",
+    "signup.passwordGood": "Good",
+    "signup.passwordStrong": "Strong",
+    "signup.agreeToTermsPrefix": "I agree to the",
+    "signup.termsOfService": "Terms of Service",
+    "signup.and": "and",
+    "signup.privacyPolicy": "Privacy Policy",
+    "signup.agreeToMarketing": "I want to receive updates about products, services and promotional offers",
+    "signup.alreadyHaveAccount": "Already have an account?",
+    "signup.login": "Login",
+    "signup.orContinueWith": "Or continue with",
+
     // Footer
     "footer.rights": "All rights reserved.",
     "footer.terms": "Terms of Service",
@@ -153,6 +203,8 @@ export const translations = {
     "nav.contact": "Contacto",
     "nav.login": "Iniciar Sesión",
     "nav.signup": "Registrarse",
+    "language": "Idioma",
+    "back": "Atrás",
 
     // Hero
     "hero.title": "Experimenta el Lujo, Vive Yolo",
@@ -265,6 +317,57 @@ export const translations = {
     "contact.info.phone": "Teléfono",
     "contact.info.email": "Correo Electrónico",
     "contact.info.offices": "Oficinas Globales",
+
+    // Login Page
+    "login.welcome": "Bienvenido de nuevo",
+    "login.email": "Correo electrónico",
+    "login.emailPlaceholder": "Ingresa tu correo electrónico",
+    "login.password": "Contraseña",
+    "login.passwordPlaceholder": "Ingresa tu contraseña",
+    "login.forgotPassword": "¿Olvidaste tu contraseña?",
+    "login.rememberMe": "Recordarme",
+    "login.signIn": "Iniciar Sesión",
+    "login.noAccount": "¿No tienes una cuenta?",
+    "login.createAccount": "Crear Cuenta",
+    "login.orContinueWith": "O continuar con",
+
+    
+
+    // Signup Page
+    "signup.createAccount": "Crear Cuenta",
+    "signup.firstName": "Nombre",
+    "signup.lastName": "Apellido",
+    "signup.email": "Correo electrónico",
+    "signup.password": "Contraseña",
+    "signup.confirmPassword": "Confirmar contraseña",
+    "signup.passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "signup.passwordWeak": "Débil",
+    "signup.passwordMedium": "Medio",
+    "signup.passwordGood": "Bueno",
+    "signup.passwordStrong": "Fuerte",
+    "signup.agreeToTermsPrefix": "Acepto los",
+    "signup.termsOfService": "Términos de Servicio",
+    "signup.and": "y",
+    "signup.privacyPolicy": "Política de Privacidad",
+    "signup.agreeToMarketing": "Quiero recibir actualizaciones sobre productos, servicios y ofertas promocionales",
+    "signup.alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "signup.login": "Iniciar Sesión",
+    "signup.orContinueWith": "O continuar con",
+
+       "forgotPassword.title": "¿Olvidaste tu contraseña?",
+    "forgotPassword.description": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "forgotPassword.email": "Correo electrónico",
+    "forgotPassword.emailPlaceholder": "Ingresa tu correo electrónico",
+    "forgotPassword.resetButton": "Restablecer Contraseña",
+    "forgotPassword.backToLogin": "Volver a Iniciar Sesión",
+    "forgotPassword.rememberedPassword": "¿Recordaste tu contraseña?",
+    "forgotPassword.signIn": "Iniciar sesión",
+    "forgotPassword.needHelp": "¿Necesitas ayuda?",
+    "forgotPassword.contactSupport": "Contacta a soporte",
+    "forgotPassword.checkEmail": "Revisa Tu Correo",
+    "forgotPassword.emailSent": "Hemos enviado un enlace para restablecer tu contraseña a {email}",
+    "forgotPassword.tryDifferentEmail": "Intentar con otro correo",
+
 
     // Footer
     "footer.rights": "Todos los derechos reservados.",

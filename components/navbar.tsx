@@ -113,13 +113,15 @@ export default function Navbar() {
             </Link>
           ))}
 
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="rounded-full px-6 ml-2 border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900 dark:border-blue-400 dark:text-blue-300 dark:hover:bg-blue-900/30 transition-all"
-          >
-            {t("nav.login")}
-          </Button>
+          <Link href="/login">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="rounded-full px-6 ml-2 border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900 dark:border-blue-400 dark:text-blue-300 dark:hover:bg-blue-900/30 transition-all"
+            >
+              {t("nav.login")}
+            </Button>
+          </Link>
 
           <div className="flex items-center space-x-1 ml-2">
             {/* Language Toggle */}
@@ -194,12 +196,18 @@ export default function Navbar() {
             ))}
 
             <div className="flex items-center justify-between py-4 border-t border-gray-200 dark:border-gray-800 mt-2">
-              <Button 
-                variant="outline" 
-                className="w-full rounded-full border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900 dark:border-blue-400 dark:text-blue-300 dark:hover:bg-blue-900/30 transition-all"
+              <Link 
+                href="/login"
+                className="w-full"
+                onClick={() => setIsOpen(false)}
               >
-                {t("nav.login")}
-              </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full rounded-full border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900 dark:border-blue-400 dark:text-blue-300 dark:hover:bg-blue-900/30 transition-all"
+                >
+                  {t("nav.login")}
+                </Button>
+              </Link>
             </div>
 
             <div className="flex items-center space-x-3 py-3 border-t border-gray-200 dark:border-gray-800">
