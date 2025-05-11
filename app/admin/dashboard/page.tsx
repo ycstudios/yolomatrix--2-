@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
+  AlertCircle,
   BarChart,
   Bell,
   Calendar,
@@ -25,12 +26,17 @@ import {
   MoreHorizontal,
   Plus,
   Settings,
+  ShieldAlert,
   ShoppingCart,
   User,
   Users,
+  Wallet,
+  FileText,
+  Activity,
+  Lock,
 } from "lucide-react"
 
-export default function AdminDashboard() {
+export default function SuperAdminDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   return (
@@ -64,24 +70,36 @@ export default function AdminDashboard() {
               Dashboard
             </Button>
             <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              Bookings
-            </Button>
-            <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
               <Home className="mr-2 h-5 w-5" />
-              Properties
+              Manage Listings
             </Button>
             <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
               <Users className="mr-2 h-5 w-5" />
-              Customers
+              Manage Users
             </Button>
             <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
-              <Calendar className="mr-2 h-5 w-5" />
-              Calendar
+              <ShieldAlert className="mr-2 h-5 w-5" />
+              Manage Sub-Admins
+            </Button>
+            <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
+              <Wallet className="mr-2 h-5 w-5" />
+              Payments & Payouts
+            </Button>
+            <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
+              <AlertCircle className="mr-2 h-5 w-5" />
+              Reports & Complaints
+            </Button>
+            <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
+              <Settings className="mr-2 h-5 w-5" />
+              System Settings
+            </Button>
+            <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
+              <Activity className="mr-2 h-5 w-5" />
+              Activity Logs
             </Button>
           </div>
           <div className="px-4 py-2 mt-4">
-            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Settings</p>
+            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Account</p>
           </div>
           <div className="space-y-1">
             <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
@@ -89,8 +107,8 @@ export default function AdminDashboard() {
               Profile
             </Button>
             <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
-              <Settings className="mr-2 h-5 w-5" />
-              Settings
+              <Lock className="mr-2 h-5 w-5" />
+              Security
             </Button>
             <Button variant="ghost" className="w-full justify-start pl-4 font-normal">
               <LogOut className="mr-2 h-5 w-5" />
@@ -115,14 +133,16 @@ export default function AdminDashboard() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                    <span className="text-xs font-medium">SA</span>
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>Super Admin</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Security</DropdownMenuItem>
                 <DropdownMenuItem>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -133,17 +153,17 @@ export default function AdminDashboard() {
         <main className="p-4 md:p-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-              <p className="text-gray-500 dark:text-gray-400">Welcome back, Admin! Here's what's happening today.</p>
+              <h1 className="text-2xl font-bold">Super Admin Dashboard</h1>
+              <p className="text-gray-500 dark:text-gray-400">Welcome back! Complete system overview and control panel.</p>
             </div>
             <div className="mt-4 md:mt-0 flex space-x-2">
               <Button variant="outline" size="sm">
                 <Download className="mr-2 h-4 w-4" />
-                Download Report
+                Export Reports
               </Button>
               <Button size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                New Property
+                <ShieldAlert className="mr-2 h-4 w-4" />
+                System Status
               </Button>
             </div>
           </div>
@@ -156,18 +176,18 @@ export default function AdminDashboard() {
                 <DollarSign className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$1,248,560</div>
-                <p className="text-xs text-green-500 dark:text-green-400">+12.5% from last month</p>
+                <div className="text-2xl font-bold">$5,248,560</div>
+                <p className="text-xs text-green-500 dark:text-green-400">+18.3% from last month</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">New Bookings</CardTitle>
+                <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
                 <ShoppingCart className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">245</div>
-                <p className="text-xs text-green-500 dark:text-green-400">+18.2% from last month</p>
+                <div className="text-2xl font-bold">2,845</div>
+                <p className="text-xs text-green-500 dark:text-green-400">+12.4% from last month</p>
               </CardContent>
             </Card>
             <Card>
@@ -176,8 +196,8 @@ export default function AdminDashboard() {
                 <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">1,423</div>
-                <p className="text-xs text-green-500 dark:text-green-400">+5.4% from last month</p>
+                <div className="text-2xl font-bold">18,423</div>
+                <p className="text-xs text-green-500 dark:text-green-400">+7.9% from last month</p>
               </CardContent>
             </Card>
             <Card>
@@ -186,8 +206,8 @@ export default function AdminDashboard() {
                 <Home className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">356</div>
-                <p className="text-xs text-blue-500 dark:text-blue-400">+2 new this week</p>
+                <div className="text-2xl font-bold">1,356</div>
+                <p className="text-xs text-blue-500 dark:text-blue-400">+24 new this week</p>
               </CardContent>
             </Card>
           </div>
@@ -196,33 +216,360 @@ export default function AdminDashboard() {
           <Tabs defaultValue="overview" className="mb-6">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="listings">Listings</TabsTrigger>
+              <TabsTrigger value="users">Users</TabsTrigger>
+              <TabsTrigger value="subadmins">Sub-Admins</TabsTrigger>
               <TabsTrigger value="reports">Reports</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="mt-4">
               <Card>
                 <CardHeader>
                   <CardTitle>Revenue Overview</CardTitle>
-                  <CardDescription>Monthly revenue breakdown for the current year</CardDescription>
+                  <CardDescription>Monthly revenue breakdown across all property types</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-80 w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
                     <BarChart className="h-10 w-10 text-gray-400" />
-                    <span className="ml-2 text-gray-500 dark:text-gray-400">Chart Visualization</span>
+                    <span className="ml-2 text-gray-500 dark:text-gray-400">Revenue Analytics Visualization</span>
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="analytics" className="mt-4">
+            <TabsContent value="listings" className="mt-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Analytics</CardTitle>
-                  <CardDescription>Detailed analytics and insights</CardDescription>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle>Property Listings</CardTitle>
+                      <CardDescription>Manage all property listings across categories</CardDescription>
+                    </div>
+                    <Button size="sm">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add New Listing
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-80 w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                    <span className="text-gray-500 dark:text-gray-400">Analytics Content</span>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-3 px-2">ID</th>
+                          <th className="text-left py-3 px-2">Property</th>
+                          <th className="text-left py-3 px-2">Category</th>
+                          <th className="text-left py-3 px-2">Owner</th>
+                          <th className="text-left py-3 px-2">Listed Date</th>
+                          <th className="text-left py-3 px-2">Status</th>
+                          <th className="text-left py-3 px-2">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          {
+                            id: "P-5678",
+                            property: "Beverly Hills Mansion",
+                            category: "Real Estate",
+                            owner: "Luxury Homes LLC",
+                            date: "Jan 15, 2025",
+                            status: "Active",
+                          },
+                          {
+                            id: "P-5679",
+                            property: "Lamborghini Aventador",
+                            category: "Vehicle",
+                            owner: "Exotic Cars Inc",
+                            date: "Feb 03, 2025",
+                            status: "Active",
+                          },
+                          {
+                            id: "P-5680",
+                            property: "Private Jet - G650",
+                            category: "Aircraft",
+                            owner: "Sky Charters",
+                            date: "Mar 12, 2025",
+                            status: "Pending Approval",
+                          },
+                          {
+                            id: "P-5681",
+                            property: "Miami Beach Yacht",
+                            category: "Watercraft",
+                            owner: "Ocean Luxury",
+                            date: "Mar 28, 2025",
+                            status: "Active",
+                          },
+                          {
+                            id: "P-5682",
+                            property: "Manhattan Penthouse",
+                            category: "Real Estate",
+                            owner: "NYC Properties",
+                            date: "Apr 05, 2025",
+                            status: "Under Review",
+                          },
+                        ].map((listing, index) => (
+                          <tr key={index} className="border-b">
+                            <td className="py-3 px-2">{listing.id}</td>
+                            <td className="py-3 px-2">{listing.property}</td>
+                            <td className="py-3 px-2">{listing.category}</td>
+                            <td className="py-3 px-2">{listing.owner}</td>
+                            <td className="py-3 px-2">{listing.date}</td>
+                            <td className="py-3 px-2">
+                              <span
+                                className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                  listing.status === "Active"
+                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                    : listing.status === "Pending Approval"
+                                      ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                      : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                }`}
+                              >
+                                {listing.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-2">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>View Details</DropdownMenuItem>
+                                  <DropdownMenuItem>Edit Listing</DropdownMenuItem>
+                                  <DropdownMenuItem>Contact Owner</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem>Approve Listing</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                                    Remove Listing
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="users" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle>User Management</CardTitle>
+                      <CardDescription>View and manage all platform users</CardDescription>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <Download className="mr-2 h-4 w-4" />
+                      Export Users
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-3 px-2">ID</th>
+                          <th className="text-left py-3 px-2">Name</th>
+                          <th className="text-left py-3 px-2">Email</th>
+                          <th className="text-left py-3 px-2">Joined</th>
+                          <th className="text-left py-3 px-2">Bookings</th>
+                          <th className="text-left py-3 px-2">Status</th>
+                          <th className="text-left py-3 px-2">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          {
+                            id: "U-8765",
+                            name: "John Smith",
+                            email: "john.smith@example.com",
+                            joined: "Dec 12, 2024",
+                            bookings: "8",
+                            status: "Active",
+                          },
+                          {
+                            id: "U-8766",
+                            name: "Emma Johnson",
+                            email: "emma.j@example.com",
+                            joined: "Jan 24, 2025",
+                            bookings: "3",
+                            status: "Active",
+                          },
+                          {
+                            id: "U-8767",
+                            name: "Michael Chen",
+                            email: "m.chen@example.com",
+                            joined: "Feb 15, 2025",
+                            bookings: "12",
+                            status: "Active",
+                          },
+                          {
+                            id: "U-8768",
+                            name: "Sophia Williams",
+                            email: "s.williams@example.com",
+                            joined: "Mar 05, 2025",
+                            bookings: "1",
+                            status: "Pending Verification",
+                          },
+                          {
+                            id: "U-8769",
+                            name: "Robert Davis",
+                            email: "r.davis@example.com",
+                            joined: "Mar 28, 2025",
+                            bookings: "0",
+                            status: "Suspended",
+                          },
+                        ].map((user, index) => (
+                          <tr key={index} className="border-b">
+                            <td className="py-3 px-2">{user.id}</td>
+                            <td className="py-3 px-2">{user.name}</td>
+                            <td className="py-3 px-2">{user.email}</td>
+                            <td className="py-3 px-2">{user.joined}</td>
+                            <td className="py-3 px-2">{user.bookings}</td>
+                            <td className="py-3 px-2">
+                              <span
+                                className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                  user.status === "Active"
+                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                    : user.status === "Pending Verification"
+                                      ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                      : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                }`}
+                              >
+                                {user.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-2">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>View Profile</DropdownMenuItem>
+                                  <DropdownMenuItem>View Bookings</DropdownMenuItem>
+                                  <DropdownMenuItem>View Activity</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem>Verify Account</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                                    Ban User
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="subadmins" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle>Sub-Admin Management</CardTitle>
+                      <CardDescription>Manage delegation and permissions</CardDescription>
+                    </div>
+                    <Button size="sm">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Sub-Admin
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-3 px-2">ID</th>
+                          <th className="text-left py-3 px-2">Name</th>
+                          <th className="text-left py-3 px-2">Email</th>
+                          <th className="text-left py-3 px-2">Role</th>
+                          <th className="text-left py-3 px-2">Assigned Area</th>
+                          <th className="text-left py-3 px-2">Last Login</th>
+                          <th className="text-left py-3 px-2">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          {
+                            id: "SA-231",
+                            name: "Alex Morgan",
+                            email: "a.morgan@yolomatrix.com",
+                            role: "Property Manager",
+                            area: "Real Estate",
+                            lastLogin: "Today, 09:24 AM",
+                          },
+                          {
+                            id: "SA-232",
+                            name: "Sarah Johnson",
+                            email: "s.johnson@yolomatrix.com",
+                            role: "User Relations",
+                            area: "Customer Support",
+                            lastLogin: "Today, 10:15 AM",
+                          },
+                          {
+                            id: "SA-233",
+                            name: "David Lee",
+                            email: "d.lee@yolomatrix.com",
+                            role: "Fleet Manager",
+                            area: "Vehicles & Aircraft",
+                            lastLogin: "Yesterday, 04:38 PM",
+                          },
+                          {
+                            id: "SA-234",
+                            name: "Jennifer Lopez",
+                            email: "j.lopez@yolomatrix.com",
+                            role: "Content Manager",
+                            area: "Marketing",
+                            lastLogin: "May 10, 2025, 11:52 AM",
+                          },
+                          {
+                            id: "SA-235",
+                            name: "James Wilson",
+                            email: "j.wilson@yolomatrix.com",
+                            role: "Finance Admin",
+                            area: "Payments & Reports",
+                            lastLogin: "May 09, 2025, 03:21 PM",
+                          },
+                        ].map((admin, index) => (
+                          <tr key={index} className="border-b">
+                            <td className="py-3 px-2">{admin.id}</td>
+                            <td className="py-3 px-2">{admin.name}</td>
+                            <td className="py-3 px-2">{admin.email}</td>
+                            <td className="py-3 px-2">{admin.role}</td>
+                            <td className="py-3 px-2">{admin.area}</td>
+                            <td className="py-3 px-2">{admin.lastLogin}</td>
+                            <td className="py-3 px-2">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>View Profile</DropdownMenuItem>
+                                  <DropdownMenuItem>Edit Permissions</DropdownMenuItem>
+                                  <DropdownMenuItem>View Activity Log</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem>Reset Password</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                                    Revoke Access
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </CardContent>
               </Card>
@@ -230,137 +577,315 @@ export default function AdminDashboard() {
             <TabsContent value="reports" className="mt-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Reports</CardTitle>
-                  <CardDescription>Generated reports and exports</CardDescription>
+                  <CardTitle>Reports & Complaints</CardTitle>
+                  <CardDescription>Reported issues requiring administrator attention</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-80 w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                    <span className="text-gray-500 dark:text-gray-400">Reports Content</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="notifications" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Notifications</CardTitle>
-                  <CardDescription>System notifications and alerts</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-80 w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                    <span className="text-gray-500 dark:text-gray-400">Notifications Content</span>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-3 px-2">ID</th>
+                          <th className="text-left py-3 px-2">Type</th>
+                          <th className="text-left py-3 px-2">Reported Item</th>
+                          <th className="text-left py-3 px-2">Reported By</th>
+                          <th className="text-left py-3 px-2">Date</th>
+                          <th className="text-left py-3 px-2">Severity</th>
+                          <th className="text-left py-3 px-2">Status</th>
+                          <th className="text-left py-3 px-2">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          {
+                            id: "R-4231",
+                            type: "Listing",
+                            item: "Manhattan Penthouse",
+                            reporter: "Emma Johnson",
+                            date: "May 10, 2025",
+                            severity: "Medium",
+                            status: "Pending",
+                          },
+                          {
+                            id: "R-4232",
+                            type: "User",
+                            item: "Robert Davis",
+                            reporter: "Sarah Williams",
+                            date: "May 09, 2025",
+                            severity: "High",
+                            status: "Under Review",
+                          },
+                          {
+                            id: "R-4233",
+                            type: "Transaction",
+                            item: "Booking #B-1238",
+                            reporter: "Michael Chen",
+                            date: "May 08, 2025",
+                            severity: "Low",
+                            status: "Resolved",
+                          },
+                          {
+                            id: "R-4234",
+                            type: "Listing",
+                            item: "Miami Beach Yacht",
+                            reporter: "System Flag",
+                            date: "May 07, 2025",
+                            severity: "Critical",
+                            status: "Pending",
+                          },
+                          {
+                            id: "R-4235",
+                            type: "Sub-Admin",
+                            item: "Content Actions",
+                            reporter: "David Lee",
+                            date: "May 06, 2025",
+                            severity: "Medium",
+                            status: "Resolved",
+                          },
+                        ].map((report, index) => (
+                          <tr key={index} className="border-b">
+                            <td className="py-3 px-2">{report.id}</td>
+                            <td className="py-3 px-2">{report.type}</td>
+                            <td className="py-3 px-2">{report.item}</td>
+                            <td className="py-3 px-2">{report.reporter}</td>
+                            <td className="py-3 px-2">{report.date}</td>
+                            <td className="py-3 px-2">
+                              <span
+                                className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                  report.severity === "Low"
+                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                    : report.severity === "Medium"
+                                      ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                      : report.severity === "High"
+                                        ? "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+                                        : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                }`}
+                              >
+                                {report.severity}
+                              </span>
+                            </td>
+                            <td className="py-3 px-2">
+                              <span
+                                className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                  report.status === "Resolved"
+                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                    : report.status === "Under Review"
+                                      ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                      : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                }`}
+                              >
+                                {report.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-2">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>View Details</DropdownMenuItem>
+                                  <DropdownMenuItem>Assign to Sub-Admin</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem>Mark as Resolved</DropdownMenuItem>
+                                  <DropdownMenuItem>Escalate Issue</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
 
-          {/* Recent Bookings */}
+          {/* System Settings and Integrations */}
+          <div className="grid gap-4 md:grid-cols-2 mb-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>System Settings</CardTitle>
+                <CardDescription>Manage global platform configuration</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div>
+                      <h3 className="text-sm font-medium">Platform Fees</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Service fee percentage for bookings</p>
+                    </div>
+                    <Button variant="outline" size="sm">Configure</Button>
+                  </div>
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div>
+                      <h3 className="text-sm font-medium">Terms & Conditions</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Platform legal and usage terms</p>
+                    </div>
+                    <Button variant="outline" size="sm">Update</Button>
+                  </div>
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div>
+                      <h3 className="text-sm font-medium">Cancellation Policies</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Default and custom cancellation rules</p>
+                    </div>
+                    <Button variant="outline" size="sm">Manage</Button>
+                  </div>
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div>
+                      <h3 className="text-sm font-medium">Security Settings</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Authentication and access controls</p>
+                    </div>
+                    <Button variant="outline" size="sm">Configure</Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium">Verification Requirements</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">User verification procedures</p>
+                    </div>
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Integrations & APIs</CardTitle>
+                <CardDescription>Manage connected services and data points</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-md flex items-center justify-center mr-3">
+                        <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium">Email Service</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">SendGrid - Connected</p>
+                      </div>
+                    </div>
+                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
+                  </div>
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-md flex items-center justify-center mr-3">
+                        <Bell className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium">SMS Notifications</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Twilio - Connected</p>
+                      </div>
+                    </div>
+                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
+                  </div>
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-md flex items-center justify-center mr-3">
+                        <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium">Payment Gateway</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Stripe - Connected</p>
+                      </div>
+                    </div>
+                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
+                  </div>
+                  <div className="flex items-center justify-between pb-4 border-b">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-md flex items-center justify-center mr-3">
+                        <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium">Fraud Detection</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Configuration Required</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm">Configure</Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-md flex items-center justify-center mr-3">
+                        <Activity className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium">Analytics</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Google Analytics - Connected</p>
+                      </div>
+                    </div>
+                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Activity Logs */}
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Recent Bookings</CardTitle>
-              <CardDescription>Latest booking transactions across all properties</CardDescription>
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle>Activity Logs</CardTitle>
+                  <CardDescription>System and user activity monitoring</CardDescription>
+                </div>
+                <Button variant="outline" size="sm">View All Logs</Button>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-3 px-2">ID</th>
-                      <th className="text-left py-3 px-2">Customer</th>
-                      <th className="text-left py-3 px-2">Property</th>
-                      <th className="text-left py-3 px-2">Date</th>
-                      <th className="text-left py-3 px-2">Amount</th>
-                      <th className="text-left py-3 px-2">Status</th>
-                      <th className="text-left py-3 px-2">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      {
-                        id: "B-1234",
-                        customer: "John Smith",
-                        property: "Beverly Hills Mansion",
-                        date: "Apr 05, 2025",
-                        amount: "$45,000",
-                        status: "Confirmed",
-                      },
-                      {
-                        id: "B-1235",
-                        customer: "Emma Johnson",
-                        property: "Miami Beach Yacht",
-                        date: "Apr 04, 2025",
-                        amount: "$28,500",
-                        status: "Pending",
-                      },
-                      {
-                        id: "B-1236",
-                        customer: "Michael Chen",
-                        property: "Private Jet - LA to NYC",
-                        date: "Apr 03, 2025",
-                        amount: "$75,200",
-                        status: "Confirmed",
-                      },
-                      {
-                        id: "B-1237",
-                        customer: "Sophia Williams",
-                        property: "Lamborghini Aventador",
-                        date: "Apr 02, 2025",
-                        amount: "$12,800",
-                        status: "Completed",
-                      },
-                      {
-                        id: "B-1238",
-                        customer: "Robert Davis",
-                        property: "Manhattan Penthouse",
-                        date: "Apr 01, 2025",
-                        amount: "$38,500",
-                        status: "Cancelled",
-                      },
-                    ].map((booking, index) => (
-                      <tr key={index} className="border-b">
-                        <td className="py-3 px-2">{booking.id}</td>
-                        <td className="py-3 px-2">{booking.customer}</td>
-                        <td className="py-3 px-2">{booking.property}</td>
-                        <td className="py-3 px-2">{booking.date}</td>
-                        <td className="py-3 px-2">{booking.amount}</td>
-                        <td className="py-3 px-2">
-                          <span
-                            className={`inline-block px-2 py-1 text-xs rounded-full ${
-                              booking.status === "Confirmed"
-                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                : booking.status === "Pending"
-                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-                                  : booking.status === "Completed"
-                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                            }`}
-                          >
-                            {booking.status}
-                          </span>
-                        </td>
-                        <td className="py-3 px-2">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>View Details</DropdownMenuItem>
-                              <DropdownMenuItem>Edit Booking</DropdownMenuItem>
-                              <DropdownMenuItem>Contact Customer</DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                                Cancel Booking
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="space-y-4">
+                {[
+                  {
+                    user: "System",
+                    action: "Scheduled backup completed successfully",
+                    timestamp: "Today, 02:30 AM",
+                    type: "System",
+                  },
+                  {
+                    user: "Sarah Johnson (Sub-Admin)",
+                    action: "Approved new property listing: Malibu Beach House",
+                    timestamp: "Today, 09:45 AM",
+                    type: "Admin",
+                  },
+                  {
+                    user: "John Smith (User)",
+                    action: "Completed booking for Lamborghini Aventador",
+                    timestamp: "Today, 10:12 AM",
+                    type: "User",
+                  },
+                  {
+                    user: "David Lee (Sub-Admin)",
+                    action: "Created new discount code: SUMMER2025",
+                    timestamp: "Today, 11:38 AM",
+                    type: "Admin",
+                  },
+                  {
+                    user: "System",
+                    action: "Flagged suspicious login attempt - IP: 192.168.1.45",
+                    timestamp: "Today, 12:05 PM",
+                    type: "Security",
+                  },
+                ].map((log, index) => (
+                  <div key={index} className="flex items-start pb-4 border-b last:border-0 last:pb-0">
+                    <div className={`w-2 h-2 rounded-full mt-2 mr-3 ${
+                      log.type === "System" 
+                        ? "bg-blue-500" 
+                        : log.type === "Admin" 
+                          ? "bg-purple-500" 
+                          : log.type === "Security" 
+                            ? "bg-red-500" 
+                            : "bg-green-500"
+                    }`} />
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start">
+                        <p className="text-sm font-medium">{log.action}</p>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{log.timestamp}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{log.user}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
