@@ -689,7 +689,10 @@ export default function SuperAdminDashboard() {
                                   <DropdownMenuItem>Assign to Sub-Admin</DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem>Mark as Resolved</DropdownMenuItem>
-                                  <DropdownMenuItem>Escalate Issue</DropdownMenuItem>
+                                  <DropdownMenuItem>Flag as Priority</DropdownMenuItem>
+                                  <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                                    Dismiss Report
+                                  </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </td>
@@ -703,193 +706,156 @@ export default function SuperAdminDashboard() {
             </TabsContent>
           </Tabs>
 
-          {/* System Settings and Integrations */}
-          <div className="grid gap-4 md:grid-cols-2 mb-6">
+          {/* Recent Activity and Upcoming Tasks */}
+          <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>System Settings</CardTitle>
-                <CardDescription>Manage global platform configuration</CardDescription>
+                <CardTitle>Recent Activity</CardTitle>
+                <CardDescription>System events and admin actions</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div>
-                      <h3 className="text-sm font-medium">Platform Fees</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Service fee percentage for bookings</p>
+                  {[
+                    {
+                      action: "New Listing Added",
+                      description: "Luxury Ski Chalet in Aspen was added to the platform",
+                      time: "10 minutes ago",
+                      icon: <Home className="h-4 w-4" />,
+                    },
+                    {
+                      action: "User Verified",
+                      description: "Sophia Williams completed identity verification",
+                      time: "1 hour ago",
+                      icon: <User className="h-4 w-4" />,
+                    },
+                    {
+                      action: "Payment Processed",
+                      description: "Booking #B-1245 payment of $15,280 was successful",
+                      time: "3 hours ago",
+                      icon: <DollarSign className="h-4 w-4" />,
+                    },
+                    {
+                      action: "Sub-Admin Login",
+                      description: "David Lee logged into the system",
+                      time: "Yesterday at 4:38 PM",
+                      icon: <LogOut className="h-4 w-4" />,
+                    },
+                    {
+                      action: "System Update",
+                      description: "Platform maintenance completed successfully",
+                      time: "2 days ago",
+                      icon: <Settings className="h-4 w-4" />,
+                    },
+                  ].map((activity, index) => (
+                    <div key={index} className="flex items-start">
+                      <div className="mr-2 rounded-full bg-blue-50 dark:bg-blue-900/20 p-2">
+                        {activity.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium">{activity.action}</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{activity.description}</p>
+                        <span className="text-xs text-gray-400 dark:text-gray-500">{activity.time}</span>
+                      </div>
                     </div>
-                    <Button variant="outline" size="sm">Configure</Button>
-                  </div>
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div>
-                      <h3 className="text-sm font-medium">Terms & Conditions</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Platform legal and usage terms</p>
-                    </div>
-                    <Button variant="outline" size="sm">Update</Button>
-                  </div>
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div>
-                      <h3 className="text-sm font-medium">Cancellation Policies</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Default and custom cancellation rules</p>
-                    </div>
-                    <Button variant="outline" size="sm">Manage</Button>
-                  </div>
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div>
-                      <h3 className="text-sm font-medium">Security Settings</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Authentication and access controls</p>
-                    </div>
-                    <Button variant="outline" size="sm">Configure</Button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-sm font-medium">Verification Requirements</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">User verification procedures</p>
-                    </div>
-                    <Button variant="outline" size="sm">Edit</Button>
-                  </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Integrations & APIs</CardTitle>
-                <CardDescription>Manage connected services and data points</CardDescription>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Upcoming Tasks</CardTitle>
+                    <CardDescription>Scheduled actions requiring attention</CardDescription>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Task
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-md flex items-center justify-center mr-3">
-                        <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  {[
+                    {
+                      task: "Review Luxury Ski Chalet",
+                      due: "Today, 5:00 PM",
+                      priority: "High",
+                      icon: <FileText className="h-4 w-4" />,
+                    },
+                    {
+                      task: "Monthly Financial Report",
+                      due: "Tomorrow, 12:00 PM",
+                      priority: "Medium",
+                      icon: <BarChart className="h-4 w-4" />,
+                    },
+                    {
+                      task: "Onboard New Sub-Admin",
+                      due: "May 12, 2025",
+                      priority: "Medium",
+                      icon: <Users className="h-4 w-4" />,
+                    },
+                    {
+                      task: "Platform Security Audit",
+                      due: "May 15, 2025",
+                      priority: "Critical",
+                      icon: <ShieldAlert className="h-4 w-4" />,
+                    },
+                    {
+                      task: "Marketing Campaign Review",
+                      due: "May 18, 2025",
+                      priority: "Low",
+                      icon: <BarChart className="h-4 w-4" />,
+                    },
+                  ].map((task, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div
+                          className={`mr-2 rounded-full p-2 ${
+                            task.priority === "Low"
+                              ? "bg-blue-50 dark:bg-blue-900/20"
+                              : task.priority === "Medium"
+                                ? "bg-yellow-50 dark:bg-yellow-900/20"
+                                : task.priority === "High"
+                                  ? "bg-orange-50 dark:bg-orange-900/20"
+                                  : "bg-red-50 dark:bg-red-900/20"
+                          }`}
+                        >
+                          {task.icon}
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-medium">{task.task}</h3>
+                          <div className="flex items-center text-xs">
+                            <Calendar className="mr-1 h-3 w-3 text-gray-400" />
+                            <span className="text-gray-500 dark:text-gray-400">{task.due}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-sm font-medium">Email Service</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">SendGrid - Connected</p>
-                      </div>
+                      <span
+                        className={`inline-block px-2 py-1 text-xs rounded-full ${
+                          task.priority === "Low"
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            : task.priority === "Medium"
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                              : task.priority === "High"
+                                ? "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+                                : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        }`}
+                      >
+                        {task.priority}
+                      </span>
                     </div>
-                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
-                  </div>
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-md flex items-center justify-center mr-3">
-                        <Bell className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">SMS Notifications</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Twilio - Connected</p>
-                      </div>
-                    </div>
-                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
-                  </div>
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-md flex items-center justify-center mr-3">
-                        <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">Payment Gateway</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Stripe - Connected</p>
-                      </div>
-                    </div>
-                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
-                  </div>
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-md flex items-center justify-center mr-3">
-                        <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">Fraud Detection</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Configuration Required</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">Configure</Button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-md flex items-center justify-center mr-3">
-                        <Activity className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">Analytics</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Google Analytics - Connected</p>
-                      </div>
-                    </div>
-                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
-                  </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
           </div>
-
-          {/* Recent Activity Logs */}
-          <Card className="mb-6">
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <div>
-                  <CardTitle>Activity Logs</CardTitle>
-                  <CardDescription>System and user activity monitoring</CardDescription>
-                </div>
-                <Button variant="outline" size="sm">View All Logs</Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[
-                  {
-                    user: "System",
-                    action: "Scheduled backup completed successfully",
-                    timestamp: "Today, 02:30 AM",
-                    type: "System",
-                  },
-                  {
-                    user: "Sarah Johnson (Sub-Admin)",
-                    action: "Approved new property listing: Malibu Beach House",
-                    timestamp: "Today, 09:45 AM",
-                    type: "Admin",
-                  },
-                  {
-                    user: "John Smith (User)",
-                    action: "Completed booking for Lamborghini Aventador",
-                    timestamp: "Today, 10:12 AM",
-                    type: "User",
-                  },
-                  {
-                    user: "David Lee (Sub-Admin)",
-                    action: "Created new discount code: SUMMER2025",
-                    timestamp: "Today, 11:38 AM",
-                    type: "Admin",
-                  },
-                  {
-                    user: "System",
-                    action: "Flagged suspicious login attempt - IP: 192.168.1.45",
-                    timestamp: "Today, 12:05 PM",
-                    type: "Security",
-                  },
-                ].map((log, index) => (
-                  <div key={index} className="flex items-start pb-4 border-b last:border-0 last:pb-0">
-                    <div className={`w-2 h-2 rounded-full mt-2 mr-3 ${
-                      log.type === "System" 
-                        ? "bg-blue-500" 
-                        : log.type === "Admin" 
-                          ? "bg-purple-500" 
-                          : log.type === "Security" 
-                            ? "bg-red-500" 
-                            : "bg-green-500"
-                    }`} />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start">
-                        <p className="text-sm font-medium">{log.action}</p>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{log.timestamp}</span>
-                      </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{log.user}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </main>
+
+        {/* Footer */}
+        <footer className="border-t p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>© 2025 YoloMatrix. All rights reserved. Super Admin Dashboard v1.2.0</p>
+        </footer>
       </div>
     </div>
   )
