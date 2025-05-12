@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
 import Navbar from "@/components/navbar"
+import TawkTo from "@/components/TawkTo" // 👈 Add this line
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({
           <LanguageProvider>
             <Navbar />
             {children}
+             <TawkTo />
           </LanguageProvider>
         </ThemeProvider>
       </body>
