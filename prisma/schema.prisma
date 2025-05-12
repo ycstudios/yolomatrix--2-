@@ -1,0 +1,231 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  cars        Car[]
+  jets        Jet[]
+  yachts      Yacht[]
+  mansions    Mansion[]
+  apartments  Apartment[]
+  bookings    Booking[]
+  reviews     Review[]
+  accounts    Account[]
+  sessions    Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Car {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  price       Float
+  location    String
+  images      String[]
+  featured    Boolean  @default(false)
+  available   Boolean  @default(true)
+  make        String
+  model       String
+  year        Int
+  color       String
+  transmission String
+  fuelType    String
+  seats       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+  reviews     Review[]
+}
+
+model Jet {
+  id            String   @id @default(cuid())
+  title         String
+  description   String   @db.Text
+  price         Float
+  location      String
+  images        String[]
+  featured      Boolean  @default(false)
+  available     Boolean  @default(true)
+  model         String
+  manufacturer  String
+  year          Int
+  range         Int
+  maxSpeed      Int
+  maxPassengers Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings      Booking[]
+  reviews       Review[]
+}
+
+model Yacht {
+  id           String   @id @default(cuid())
+  title        String
+  description  String   @db.Text
+  price        Float
+  location     String
+  images       String[]
+  featured     Boolean  @default(false)
+  available    Boolean  @default(true)
+  length       Float
+  cabins       Int
+  crew         Int
+  year         Int
+  manufacturer String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings     Booking[]
+  reviews      Review[]
+}
+
+model Mansion {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  price       Float
+  location    String
+  images      String[]
+  featured    Boolean  @default(false)
+  available   Boolean  @default(true)
+  bedrooms    Int
+  bathrooms   Int
+  area        Float
+  amenities   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+  reviews     Review[]
+}
+
+model Apartment {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  price       Float
+  location    String
+  images      String[]
+  featured    Boolean  @default(false)
+  available   Boolean  @default(true)
+  bedrooms    Int
+  bathrooms   Int
+  area        Float
+  floor       Int
+  amenities   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+  reviews     Review[]
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  startDate   DateTime
+  endDate     DateTime
+  totalPrice  Float
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Polymorphic relations
+  carId       String?
+  car         Car?     @relation(fields: [carId], references: [id], onDelete: SetNull)
+  
+  jetId       String?
+  jet         Jet?     @relation(fields: [jetId], references: [id], onDelete: SetNull)
+  
+  yachtId     String?
+  yacht       Yacht?   @relation(fields: [yachtId], references: [id], onDelete: SetNull)
+  
+  mansionId   String?
+  mansion     Mansion? @relation(fields: [mansionId], references: [id], onDelete: SetNull)
+  
+  apartmentId String?
+  apartment   Apartment? @relation(fields: [apartmentId], references: [id], onDelete: SetNull)
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  rating      Int
+  comment     String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Polymorphic relations
+  carId       String?
+  car         Car?     @relation(fields: [carId], references: [id], onDelete: SetNull)
+  
+  jetId       String?
+  jet         Jet?     @relation(fields: [jetId], references: [id], onDelete: SetNull)
+  
+  yachtId     String?
+  yacht       Yacht?   @relation(fields: [yachtId], references: [id], onDelete: SetNull)
+  
+  mansionId   String?
+  mansion     Mansion? @relation(fields: [mansionId], references: [id], onDelete: SetNull)
+  
+  apartmentId String?
+  apartment   Apartment? @relation(fields: [apartmentId], references: [id], onDelete: SetNull)
+}
