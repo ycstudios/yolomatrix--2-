@@ -1,558 +1,680 @@
 "use client"
+import React, { useState, useEffect } from "react";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { 
+  ArrowUpRight, Settings, Users, CreditCard, FileText, 
+  Search, Filter, RefreshCw, Download, AlertTriangle
+} from "lucide-react";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AlertCircle, BarChart, Bell, Calendar, DollarSign, Download, Home, LayoutDashboard, LogOut, Menu, MoreHorizontal, Plus, Settings, ShieldAlert, ShoppingCart, User, Users, Wallet, FileText, Activity, Lock } from "lucide-react"
+// Sample data for charts
+const revenueData = [
+  { name: 'Jan', amount: 125000 },
+  { name: 'Feb', amount: 175000 },
+  { name: 'Mar', amount: 225000 },
+  { name: 'Apr', amount: 300000 },
+  { name: 'May', amount: 375000 },
+];
 
-// Sample data
-const LISTINGS = [
-  { id: "P-5678", property: "Beverly Hills Mansion", category: "Real Estate", owner: "Luxury Homes LLC", date: "Jan 15, 2025", status: "Active" },
-  { id: "P-5679", property: "Lamborghini Aventador", category: "Vehicle", owner: "Exotic Cars Inc", date: "Feb 03, 2025", status: "Active" },
-  { id: "P-5680", property: "Private Jet - G650", category: "Aircraft", owner: "Sky Charters", date: "Mar 12, 2025", status: "Pending Approval" },
-  { id: "P-5681", property: "Miami Beach Yacht", category: "Watercraft", owner: "Ocean Luxury", date: "Mar 28, 2025", status: "Active" },
-  { id: "P-5682", property: "Manhattan Penthouse", category: "Real Estate", owner: "NYC Properties", date: "Apr 05, 2025", status: "Under Review" }
-]
+const userGrowthData = [
+  { name: 'Jan', users: 1200 },
+  { name: 'Feb', users: 1450 },
+  { name: 'Mar', users: 1600 },
+  { name: 'Apr', users: 1800 },
+  { name: 'May', users: 2100 },
+];
 
-const USERS = [
-  { id: "U-8765", name: "John Smith", email: "john.smith@example.com", joined: "Dec 12, 2024", bookings: "8", status: "Active" },
-  { id: "U-8766", name: "Emma Johnson", email: "emma.j@example.com", joined: "Jan 24, 2025", bookings: "3", status: "Active" },
-  { id: "U-8767", name: "Michael Chen", email: "m.chen@example.com", joined: "Feb 15, 2025", bookings: "12", status: "Active" },
-  { id: "U-8768", name: "Sophia Williams", email: "s.williams@example.com", joined: "Mar 05, 2025", bookings: "1", status: "Pending Verification" },
-  { id: "U-8769", name: "Robert Davis", email: "r.davis@example.com", joined: "Mar 28, 2025", bookings: "0", status: "Suspended" }
-]
+const bookingData = [
+  { name: 'Mon', bookings: 45 },
+  { name: 'Tue', bookings: 52 },
+  { name: 'Wed', bookings: 49 },
+  { name: 'Thu', bookings: 63 },
+  { name: 'Fri', bookings: 75 },
+  { name: 'Sat', bookings: 82 },
+  { name: 'Sun', bookings: 70 },
+];
 
-const ADMINS = [
-  { id: "SA-231", name: "Alex Morgan", email: "a.morgan@yolomatrix.com", role: "Property Manager", area: "Real Estate", lastLogin: "Today, 09:24 AM" },
-  { id: "SA-232", name: "Sarah Johnson", email: "s.johnson@yolomatrix.com", role: "User Relations", area: "Customer Support", lastLogin: "Today, 10:15 AM" },
-  { id: "SA-233", name: "David Lee", email: "d.lee@yolomatrix.com", role: "Fleet Manager", area: "Vehicles & Aircraft", lastLogin: "Yesterday, 04:38 PM" },
-  { id: "SA-234", name: "Jennifer Lopez", email: "j.lopez@yolomatrix.com", role: "Content Manager", area: "Marketing", lastLogin: "May 10, 2025, 11:52 AM" },
-  { id: "SA-235", name: "James Wilson", email: "j.wilson@yolomatrix.com", role: "Finance Admin", area: "Payments & Reports", lastLogin: "May 09, 2025, 03:21 PM" }
-]
+// Sample data for tabs
+const listings = [
+  { id: 1, name: "Luxury Villa in Goa", status: "Active", views: 542, createdAt: "2025-04-15" },
+  { id: 2, name: "Beachfront Apartment", status: "Pending", views: 321, createdAt: "2025-04-12" },
+  { id: 3, name: "Mountain Retreat", status: "Active", views: 421, createdAt: "2025-04-10" },
+  { id: 4, name: "City Center Loft", status: "Active", views: 289, createdAt: "2025-04-08" },
+  { id: 5, name: "Riverside Cottage", status: "Inactive", views: 176, createdAt: "2025-04-05" },
+  { id: 6, name: "Heritage Haveli Suite", status: "Active", views: 398, createdAt: "2025-04-02" },
+];
 
-const REPORTS = [
-  { id: "R-4231", type: "Listing", item: "Manhattan Penthouse", reporter: "Emma Johnson", date: "May 10, 2025", severity: "Medium", status: "Pending" },
-  { id: "R-4232", type: "User", item: "Robert Davis", reporter: "Sarah Williams", date: "May 09, 2025", severity: "High", status: "Under Review" },
-  { id: "R-4233", type: "Transaction", item: "Booking #B-1238", reporter: "Michael Chen", date: "May 08, 2025", severity: "Low", status: "Resolved" },
-  { id: "R-4234", type: "Listing", item: "Miami Beach Yacht", reporter: "System Flag", date: "May 07, 2025", severity: "Critical", status: "Pending" },
-  { id: "R-4235", type: "Sub-Admin", item: "Content Actions", reporter: "David Lee", date: "May 06, 2025", severity: "Medium", status: "Resolved" }
-]
+const users = [
+  { id: 1, name: "Rajesh Kumar", email: "rajesh@example.com", status: "Active", joinDate: "2025-03-12" },
+  { id: 2, name: "Priya Sharma", email: "priya@example.com", status: "Active", joinDate: "2025-03-15" },
+  { id: 3, name: "Amit Singh", email: "amit@example.com", status: "Banned", joinDate: "2025-02-28" },
+  { id: 4, name: "Sneha Gupta", email: "sneha@example.com", status: "Active", joinDate: "2025-04-05" },
+  { id: 5, name: "Karan Malhotra", email: "karan@example.com", status: "Inactive", joinDate: "2025-03-22" },
+  { id: 6, name: "Neha Reddy", email: "neha@example.com", status: "Active", joinDate: "2025-04-10" },
+];
 
-const ACTIVITIES = [
-  { action: "New Listing Added", description: "Luxury Ski Chalet in Aspen was added", time: "10 minutes ago", icon: <Home className="h-4 w-4" /> },
-  { action: "User Verified", description: "Sophia Williams completed verification", time: "1 hour ago", icon: <User className="h-4 w-4" /> },
-  { action: "Payment Processed", description: "Booking #B-1245 payment of $15,280", time: "3 hours ago", icon: <DollarSign className="h-4 w-4" /> },
-  { action: "Sub-Admin Login", description: "David Lee logged into the system", time: "Yesterday at 4:38 PM", icon: <LogOut className="h-4 w-4" /> },
-  { action: "System Update", description: "Platform maintenance completed", time: "2 days ago", icon: <Settings className="h-4 w-4" /> }
-]
+const payouts = [
+  { id: 1, host: "Vikram Mehta", amount: "₹24,500", status: "Processed", date: "2025-04-15" },
+  { id: 2, host: "Neha Gupta", amount: "₹18,750", status: "Pending", date: "2025-04-16" },
+  { id: 3, host: "Sunil Patel", amount: "₹32,000", status: "Processing", date: "2025-04-14" },
+  { id: 4, host: "Meera Shah", amount: "₹15,800", status: "Processed", date: "2025-04-13" },
+  { id: 5, host: "Arjun Nair", amount: "₹21,350", status: "Pending", date: "2025-04-16" },
+  { id: 6, host: "Divya Chauhan", amount: "₹28,600", status: "Processing", date: "2025-04-15" },
+];
 
-const TASKS = [
-  { task: "Review Luxury Ski Chalet", due: "Today, 5:00 PM", priority: "High", icon: <FileText className="h-4 w-4" /> },
-  { task: "Monthly Financial Report", due: "Tomorrow, 12:00 PM", priority: "Medium", icon: <BarChart className="h-4 w-4" /> },
-  { task: "Onboard New Sub-Admin", due: "May 12, 2025", priority: "Medium", icon: <Users className="h-4 w-4" /> },
-  { task: "Platform Security Audit", due: "May 15, 2025", priority: "Critical", icon: <ShieldAlert className="h-4 w-4" /> },
-  { task: "Marketing Campaign Review", due: "May 18, 2025", priority: "Low", icon: <BarChart className="h-4 w-4" /> }
-]
+const reports = [
+  { id: 1, type: "Property Complaint", status: "New", priority: "High", date: "2025-04-15" },
+  { id: 2, type: "Payment Issue", status: "In Progress", priority: "Medium", date: "2025-04-14" },
+  { id: 3, type: "User Complaint", status: "Resolved", priority: "Low", date: "2025-04-12" },
+  { id: 4, type: "Technical Issue", status: "New", priority: "High", date: "2025-04-15" },
+  { id: 5, type: "Booking Dispute", status: "In Progress", priority: "Medium", date: "2025-04-13" },
+  { id: 6, type: "Security Concern", status: "New", priority: "High", date: "2025-04-16" },
+];
 
-// Reusable components
-const StatusBadge = ({ status, type = "default" }) => {
-  const styles = {
-    default: {
-      Active: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-      "Pending Approval": "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-      "Under Review": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-      "Pending Verification": "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-      Suspended: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-      Pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-      Resolved: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-    },
-    priority: {
-      Low: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-      Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-      High: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-      Critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-    },
-    severity: {
-      Low: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-      Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-      High: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-      Critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+export default function AdminDashboard() {
+  // State management
+  const [activeTab, setActiveTab] = useState("listings");
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
+  const itemsPerPage = 5;
+
+  // Simulate data loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Simulate refresh action
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  // Filter data based on search and status
+  const filterData = (data, type) => {
+    let filteredData = [...data];
+    
+    // Apply search filter
+    if (searchTerm) {
+      filteredData = filteredData.filter(item => {
+        if (type === "listings") {
+          return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (type === "users") {
+          return item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                 item.email.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (type === "payouts") {
+          return item.host.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (type === "reports") {
+          return item.type.toLowerCase().includes(searchTerm.toLowerCase());
+        }
+        return true;
+      });
     }
-  }
-  
-  const styleClass = type === "priority" ? styles.priority[status] : 
-                    type === "severity" ? styles.severity[status] : 
-                    styles.default[status]
-  
-  return (
-    <span className={`inline-block px-2 py-1 text-xs rounded-full ${styleClass}`}>
-      {status}
-    </span>
-  )
-}
+    
+    // Apply status filter
+    if (statusFilter !== "all") {
+      filteredData = filteredData.filter(item => item.status.toLowerCase() === statusFilter.toLowerCase());
+    }
+    
+    return filteredData;
+  };
 
-const DataTable = ({ data, columns, actions }) => (
-  <div className="overflow-x-auto">
-    <table className="w-full">
-      <thead>
-        <tr className="border-b">
-          {columns.map((col, i) => (
-            <th key={i} className="text-left py-3 px-2">{col.header}</th>
-          ))}
-          {actions && <th className="text-left py-3 px-2">Actions</th>}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, rowIndex) => (
-          <tr key={rowIndex} className="border-b">
-            {columns.map((col, colIndex) => (
-              <td key={colIndex} className="py-3 px-2">
-                {col.render ? col.render(row) : row[col.accessor]}
-              </td>
-            ))}
-            {actions && (
-              <td className="py-3 px-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {actions.map((action, i) => (
-                      action.separator ? 
-                        <DropdownMenuSeparator key={i} /> : 
-                        <DropdownMenuItem key={i} className={action.className}>{action.label}</DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </td>
-            )}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)
+  // Get paginated data
+  const getPaginatedData = (data, type) => {
+    const filteredData = filterData(data, type);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredData.slice(startIndex, endIndex);
+  };
 
-export default function SuperAdminDashboard() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  // Format large numbers to Indian format
+  const formatIndianCurrency = (value) => {
+    return `₹${value.toLocaleString('en-IN')}`;
+  };
 
-  // Column definitions for tables
-  const listingColumns = [
-    { header: "ID", accessor: "id" },
-    { header: "Property", accessor: "property" },
-    { header: "Category", accessor: "category" },
-    { header: "Owner", accessor: "owner" },
-    { header: "Listed Date", accessor: "date" },
-    { header: "Status", accessor: "status", render: (row) => <StatusBadge status={row.status} /> }
-  ]
-  
-  const userColumns = [
-    { header: "ID", accessor: "id" },
-    { header: "Name", accessor: "name" },
-    { header: "Email", accessor: "email" },
-    { header: "Joined", accessor: "joined" },
-    { header: "Bookings", accessor: "bookings" },
-    { header: "Status", accessor: "status", render: (row) => <StatusBadge status={row.status} /> }
-  ]
-  
-  const adminColumns = [
-    { header: "ID", accessor: "id" },
-    { header: "Name", accessor: "name" },
-    { header: "Email", accessor: "email" },
-    { header: "Role", accessor: "role" },
-    { header: "Assigned Area", accessor: "area" },
-    { header: "Last Login", accessor: "lastLogin" }
-  ]
-  
-  const reportColumns = [
-    { header: "ID", accessor: "id" },
-    { header: "Type", accessor: "type" },
-    { header: "Reported Item", accessor: "item" },
-    { header: "Reported By", accessor: "reporter" },
-    { header: "Date", accessor: "date" },
-    { header: "Severity", accessor: "severity", render: (row) => <StatusBadge status={row.severity} type="severity" /> },
-    { header: "Status", accessor: "status", render: (row) => <StatusBadge status={row.status} /> }
-  ]
+  // Status badge component
+  const StatusBadge = ({ status, type }) => {
+    let color = "bg-gray-100 text-gray-800";
+    
+    if (type === "status") {
+      if (status === "Active") color = "bg-green-100 text-green-800";
+      else if (status === "Pending") color = "bg-yellow-100 text-yellow-800";
+      else if (status === "Inactive" || status === "Banned") color = "bg-red-100 text-red-800";
+      else if (status === "Processing") color = "bg-blue-100 text-blue-800";
+      else if (status === "New") color = "bg-red-100 text-red-800";
+      else if (status === "In Progress") color = "bg-blue-100 text-blue-800";
+      else if (status === "Resolved") color = "bg-green-100 text-green-800";
+    } else if (type === "priority") {
+      if (status === "High") color = "bg-red-100 text-red-800";
+      else if (status === "Medium") color = "bg-yellow-100 text-yellow-800";
+      else if (status === "Low") color = "bg-green-100 text-green-800";
+    }
+    
+    return (
+      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${color}`}>
+        {status}
+      </span>
+    );
+  };
 
-  // Action definitions for dropdown menus
-  const listingActions = [
-    { label: "View Details" },
-    { label: "Edit Listing" },
-    { label: "Contact Owner" },
-    { separator: true },
-    { label: "Approve Listing" },
-    { label: "Remove Listing", className: "text-red-600 dark:text-red-400" }
-  ]
-  
-  const userActions = [
-    { label: "View Profile" },
-    { label: "View Bookings" },
-    { label: "View Activity" },
-    { separator: true },
-    { label: "Verify Account" },
-    { label: "Ban User", className: "text-red-600 dark:text-red-400" }
-  ]
-  
-  const adminActions = [
-    { label: "View Profile" },
-    { label: "Edit Permissions" },
-    { label: "View Activity Log" },
-    { separator: true },
-    { label: "Reset Password" },
-    { label: "Revoke Access", className: "text-red-600 dark:text-red-400" }
-  ]
-  
-  const reportActions = [
-    { label: "View Details" },
-    { label: "Assign to Sub-Admin" },
-    { separator: true },
-    { label: "Mark as Resolved" },
-    { label: "Flag as Priority" },
-    { label: "Dismiss Report", className: "text-red-600 dark:text-red-400" }
-  ]
-
-  const statCards = [
-    { title: "Total Revenue", value: "$5,248,560", change: "+18.3% from last month", icon: <DollarSign className="h-4 w-4 text-gray-500 dark:text-gray-400" /> },
-    { title: "Total Bookings", value: "2,845", change: "+12.4% from last month", icon: <ShoppingCart className="h-4 w-4 text-gray-500 dark:text-gray-400" /> },
-    { title: "Active Users", value: "18,423", change: "+7.9% from last month", icon: <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" /> },
-    { title: "Active Properties", value: "1,356", change: "+24 new this week", icon: <Home className="h-4 w-4 text-gray-500 dark:text-gray-400" /> }
-  ]
-
-  // Sidebar menu items definition
-  const sidebarMainMenu = [
-    { icon: <LayoutDashboard className="mr-2 h-5 w-5" />, label: "Dashboard", active: true },
-    { icon: <Home className="mr-2 h-5 w-5" />, label: "Manage Listings" },
-    { icon: <Users className="mr-2 h-5 w-5" />, label: "Manage Users" },
-    { icon: <ShieldAlert className="mr-2 h-5 w-5" />, label: "Manage Sub-Admins" },
-    { icon: <Wallet className="mr-2 h-5 w-5" />, label: "Payments & Payouts" },
-    { icon: <AlertCircle className="mr-2 h-5 w-5" />, label: "Reports & Complaints" },
-    { icon: <Settings className="mr-2 h-5 w-5" />, label: "System Settings" },
-    { icon: <Activity className="mr-2 h-5 w-5" />, label: "Activity Logs" }
-  ]
-  
-  const sidebarAccountMenu = [
-    { icon: <User className="mr-2 h-5 w-5" />, label: "Profile" },
-    { icon: <Lock className="mr-2 h-5 w-5" />, label: "Security" },
-    { icon: <LogOut className="mr-2 h-5 w-5" />, label: "Logout" }
-  ]
+  // Loading skeleton component
+  const TableSkeleton = () => (
+    <div className="space-y-3">
+      <div className="flex items-center space-x-4">
+        <Skeleton className="h-10 w-1/4" />
+        <Skeleton className="h-10 w-1/4" />
+      </div>
+      <Skeleton className="h-12 w-full" />
+      <Skeleton className="h-12 w-full" />
+      <Skeleton className="h-12 w-full" />
+      <Skeleton className="h-12 w-full" />
+      <Skeleton className="h-12 w-full" />
+    </div>
+  );
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950">
-      {/* Sidebar - Mobile overlay when open */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-30 z-40 lg:hidden" 
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-      
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white dark:bg-gray-900 shadow-lg transition-transform duration-200 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:relative lg:translate-x-0`}
-      >
-        <div className="flex h-16 items-center justify-between px-4 border-b">
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 text-transparent bg-clip-text">
-            YoloMatrix
-          </span>
-          <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(false)} className="lg:hidden">
-            <Menu className="h-5 w-5" />
+    <div className="flex flex-col gap-6 p-4 md:p-6 bg-gray-50 min-h-screen">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
+            {refreshing ? "Refreshing..." : "Refresh Data"}
+          </Button>
+          <Button variant="outline" size="sm">
+            <Settings className="w-4 h-4 mr-2" />
+            Settings
+          </Button>
+          <Button variant="default" size="sm">
+            <Download className="w-4 h-4 mr-2" />
+            Export Data
           </Button>
         </div>
-        
-        <div className="py-4">
-          <div className="px-4 py-2">
-            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Main</p>
-          </div>
-          <div className="space-y-1">
-            {sidebarMainMenu.map((item, i) => (
-              <Button
-                key={i}
-                variant="ghost"
-                className={`w-full justify-start pl-4 font-normal ${item.active ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20" : ""}`}
-              >
-                {item.icon}
-                {item.label}
-              </Button>
-            ))}
-          </div>
-          
-          <div className="px-4 py-2 mt-4">
-            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Account</p>
-          </div>
-          <div className="space-y-1">
-            {sidebarAccountMenu.map((item, i) => (
-              <Button key={i} variant="ghost" className="w-full justify-start pl-4 font-normal">
-                {item.icon}
-                {item.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </aside>
+      </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
-        {/* Top Bar */}
-        <header className="sticky top-0 z-40 h-16 border-b bg-white dark:bg-gray-900 flex items-center px-4 shadow-sm">
-          <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)} className="lg:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
-          <div className="ml-auto flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-600" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                    <span className="text-xs font-medium">SA</span>
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Super Admin</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Security</DropdownMenuItem>
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-
-        {/* Dashboard Content */}
-        <main className="p-4 md:p-6 flex-1">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+      {/* Alert for new reports - only show if there are high priority new reports */}
+      {reports.some(report => report.priority === "High" && report.status === "New") && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-md">
+          <div className="flex items-center">
+            <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
             <div>
-              <h1 className="text-2xl font-bold">Super Admin Dashboard</h1>
-              <p className="text-gray-500 dark:text-gray-400">Welcome back! Complete system overview and control panel.</p>
-            </div>
-            <div className="mt-4 md:mt-0 flex space-x-2">
-              <Button variant="outline" size="sm">
-                <Download className="mr-2 h-4 w-4" />
-                Export Reports
-              </Button>
-              <Button size="sm">
-                <ShieldAlert className="mr-2 h-4 w-4" />
-                System Status
+              <p className="text-sm text-red-700 font-medium">
+                You have {reports.filter(r => r.priority === "High" && r.status === "New").length} high priority report(s) that need your attention.
+              </p>
+              <Button variant="link" className="p-0 h-auto text-red-700 hover:text-red-900" onClick={() => setActiveTab("reports")}>
+                View Reports
               </Button>
             </div>
           </div>
-
-          {/* Stats Cards */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
-            {statCards.map((stat, i) => (
-              <Card key={i}>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                  {stat.icon}
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <p className="text-xs text-green-500 dark:text-green-400">{stat.change}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Tabs */}
-          <Tabs defaultValue="overview" className="mb-6">
-            <TabsList className="overflow-x-auto whitespace-nowrap">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="listings">Listings</TabsTrigger>
-              <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="subadmins">Sub-Admins</TabsTrigger>
-              <TabsTrigger value="reports">Reports</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="overview" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Revenue Overview</CardTitle>
-                  <CardDescription>Monthly revenue breakdown across all property types</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-80 w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                    <BarChart className="h-10 w-10 text-gray-400" />
-                    <span className="ml-2 text-gray-500 dark:text-gray-400">Revenue Analytics Visualization</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="listings" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div>
-                      <CardTitle>Property Listings</CardTitle>
-                      <CardDescription>Manage all property listings across categories</CardDescription>
-                    </div>
-                    <Button size="sm" className="self-start sm:self-auto">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add New Listing
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <DataTable 
-                    data={LISTINGS} 
-                    columns={listingColumns} 
-                    actions={listingActions} 
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="users" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div>
-                      <CardTitle>User Management</CardTitle>
-                      <CardDescription>View and manage all platform users</CardDescription>
-                    </div>
-                    <Button variant="outline" size="sm" className="self-start sm:self-auto">
-                      <Download className="mr-2 h-4 w-4" />
-                      Export Users
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <DataTable 
-                    data={USERS} 
-                    columns={userColumns} 
-                    actions={userActions} 
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="subadmins" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div>
-                      <CardTitle>Sub-Admin Management</CardTitle>
-                      <CardDescription>Manage delegation and permissions</CardDescription>
-                    </div>
-                    <Button size="sm" className="self-start sm:self-auto">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Sub-Admin
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <DataTable 
-                    data={ADMINS} 
-                    columns={adminColumns} 
-                    actions={adminActions} 
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="reports" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Reports & Complaints</CardTitle>
-                  <CardDescription>Reported issues requiring administrator attention</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <DataTable 
-                    data={REPORTS} 
-                    columns={reportColumns} 
-                    actions={reportActions} 
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-
-          {/* Recent Activity and Upcoming Tasks */}
-          <div className="grid gap-4 md:grid-cols-2">
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>System events and admin actions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {ACTIVITIES.map((activity, index) => (
-                    <div key={index} className="flex items-start">
-                      <div className="mr-2 rounded-full bg-blue-50 dark:bg-blue-900/20 p-2">
-                        {activity.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">{activity.action}</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{activity.description}</p>
-                        <span className="text-xs text-gray-400 dark:text-gray-500">{activity.time}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Upcoming Tasks */}
-            <Card>
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                  <div>
-                    <CardTitle>Upcoming Tasks</CardTitle>
-                    <CardDescription>Scheduled actions requiring attention</CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm" className="self-start sm:self-auto">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Task
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                {TASKS.map((task, index) => (
-  <div key={index} className="flex items-center justify-between flex-wrap gap-2">
-    <div className="flex items-center">
-      <div className={`mr-2 rounded-full p-2 ${
-        task.priority === "Low" ? "bg-blue-50 dark:bg-blue-900/20" :
-        task.priority === "Medium" ? "bg-yellow-50 dark:bg-yellow-900/20" :
-        task.priority === "High" ? "bg-orange-50 dark:bg-orange-900/20" : 
-        "bg-red-50 dark:bg-red-900/20"
-      }`}>
-        {task.icon}
-      </div>
-      <div>
-        <h3 className="text-sm font-medium">{task.task}</h3>
-        <div className="flex items-center text-xs">
-          <Calendar className="mr-1 h-3 w-3 text-gray-400" />
-          <span className="text-gray-500 dark:text-gray-400">{task.due}</span>
         </div>
-      </div>
-    </div>
-    <div>
-      <StatusBadge status={task.priority} type="priority" />
-    </div>
-  </div>
-))}
+      )}
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {loading ? (
+          <>
+            <Skeleton className="h-32 w-full rounded-lg" />
+            <Skeleton className="h-32 w-full rounded-lg" />
+            <Skeleton className="h-32 w-full rounded-lg" />
+            <Skeleton className="h-32 w-full rounded-lg" />
+          </>
+        ) : (
+          <>
+            <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Total Bookings</p>
+                    <h2 className="text-3xl font-bold mt-1">1,245</h2>
+                    <p className="text-sm text-green-600 flex items-center mt-1">
+                      <ArrowUpRight className="w-4 h-4 mr-1" /> +12% from last month
+                    </p>
+                  </div>
+                  <div className="bg-blue-100 p-2 rounded-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M16 2V6" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M8 2V6" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M3 10H21" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </main>
 
-        {/* Footer */}
-        <footer className="border-t p-4 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>&copy; 2025 YoloMatrix. All rights reserved.</p>
-        </footer>
+            <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Revenue (This Month)</p>
+                    <h2 className="text-3xl font-bold mt-1">{formatIndianCurrency(375000)}</h2>
+                    <p className="text-sm text-green-600 flex items-center mt-1">
+                      <ArrowUpRight className="w-4 h-4 mr-1" /> +25% from last month
+                    </p>
+                  </div>
+                  <div className="bg-green-100 p-2 rounded-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 1V23" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">User Growth</p>
+                    <h2 className="text-3xl font-bold mt-1">+8.5%</h2>
+                    <p className="text-sm text-green-600 flex items-center mt-1">
+                      <ArrowUpRight className="w-4 h-4 mr-1" /> 245 new users
+                    </p>
+                  </div>
+                  <div className="bg-purple-100 p-2 rounded-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="w-full">
+                    <p className="text-sm font-medium text-gray-500">Quick Actions</p>
+                    <div className="mt-3 space-y-2">
+                      <Button variant="outline" size="sm" className="w-full justify-start">
+                        <Users className="w-4 h-4 mr-2" />
+                        Add New User
+                      </Button>
+                      <Button variant="outline" size="sm" className="w-full justify-start">
+                        <FileText className="w-4 h-4 mr-2" />
+                        Add New Listing
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {loading ? (
+          <>
+            <Skeleton className="h-64 w-full rounded-lg" />
+            <Skeleton className="h-64 w-full rounded-lg" />
+          </>
+        ) : (
+          <>
+            <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium">Revenue Trend (2025)</h3>
+                  <Select defaultValue="monthly">
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="View" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="weekly">Weekly</SelectItem>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                      <SelectItem value="yearly">Yearly</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={revenueData}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#EEE" />
+                      <XAxis dataKey="name" />
+                      <YAxis tickFormatter={(value) => `₹${value/1000}k`} />
+                      <Tooltip formatter={(value) => [`₹${value.toLocaleString('en-IN')}`, 'Revenue']} />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="amount" 
+                        stroke="#3B82F6" 
+                        strokeWidth={2} 
+                        activeDot={{ r: 8 }} 
+                        dot={{ stroke: '#3B82F6', strokeWidth: 2, fill: '#FFF', r: 4 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium">Weekly Bookings</h3>
+                  <Select defaultValue="thisWeek">
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Period" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lastWeek">Last Week</SelectItem>
+                      <SelectItem value="thisWeek">This Week</SelectItem>
+                      <SelectItem value="lastMonth">Last Month</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={bookingData}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#EEE" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar 
+                        dataKey="bookings" 
+                        fill="#8B5CF6" 
+                        barSize={30} 
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </div>
+
+      {/* Tabs Section */}
+      <Card className="shadow-sm">
+        <CardContent className="p-4">
+          <Tabs defaultValue="listings" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-6 flex flex-wrap">
+              <TabsTrigger value="listings" className="flex items-center">
+                <FileText className="w-4 h-4 mr-2" />
+                Manage Listings
+              </TabsTrigger>
+              <TabsTrigger value="users" className="flex items-center">
+                <Users className="w-4 h-4 mr-2" />
+                Manage Users
+              </TabsTrigger>
+              <TabsTrigger value="payouts" className="flex items-center">
+                <CreditCard className="w-4 h-4 mr-2" />
+                Payments & Payouts
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="flex items-center">
+                <FileText className="w-4 h-4 mr-2" />
+                Reports
+                {reports.filter(r => r.status === "New").length > 0 && (
+                  <Badge className="ml-2 bg-red-500">{reports.filter(r => r.status === "New").length}</Badge>
+                )}
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Search and filter controls */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+              <div className="flex-1 w-full sm:w-auto flex gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder={`Search ${activeTab}...`}
+                    className="pl-8"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                    {activeTab === "reports" && (
+                      <>
+                        <SelectItem value="new">New</SelectItem>
+                        <SelectItem value="in progress">In Progress</SelectItem>
+                        <SelectItem value="resolved">Resolved</SelectItem>
+                      </>
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Button variant="outline" size="sm" className="flex items-center">
+                  <Filter className="w-4 h-4 mr-2" />
+                  Advanced Filters
+                </Button>
+              </div>
+            </div>
+
+            {loading ? (
+              <TableSkeleton />
+            ) : (
+              <>
+                <TabsContent value="listings">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Property Name</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {getPaginatedData(listings, "listings").map((listing) => (
+                       <tr key={listing.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{listing.id}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{listing.name}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <StatusBadge status={listing.status} type="status" />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{listing.views}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{listing.createdAt}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              <div className="flex space-x-2">
+                                <Button variant="ghost" size="sm">Edit</Button>
+                                <Button variant="ghost" size="sm" className="text-red-600">Delete</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="users">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Join Date</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {getPaginatedData(users, "users").map((user) => (
+                          <tr key={user.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.id}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <StatusBadge status={user.status} type="status" />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.joinDate}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              <div className="flex space-x-2">
+                                <Button variant="ghost" size="sm">Edit</Button>
+                                <Button variant="ghost" size="sm" className="text-red-600">Ban</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="payouts">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Host</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {getPaginatedData(payouts, "payouts").map((payout) => (
+                          <tr key={payout.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payout.id}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{payout.host}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payout.amount}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <StatusBadge status={payout.status} type="status" />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payout.date}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              <div className="flex space-x-2">
+                                <Button variant="ghost" size="sm">View</Button>
+                                <Button variant="ghost" size="sm" className="text-green-600">Process</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="reports">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {getPaginatedData(reports, "reports").map((report) => (
+                          <tr key={report.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report.id}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{report.type}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <StatusBadge status={report.status} type="status" />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <StatusBadge status={report.priority} type="priority" />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report.date}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              <div className="flex space-x-2">
+                                <Button variant="ghost" size="sm">View</Button>
+                                <Button variant="ghost" size="sm" className="text-blue-600">Assign</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </TabsContent>
+              </>
+            )}
+
+            {/* Pagination */}
+            <div className="mt-6">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious href="#" onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))} />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" onClick={() => setCurrentPage(1)} isActive={currentPage === 1}>1</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" onClick={() => setCurrentPage(2)} isActive={currentPage === 2}>2</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" onClick={() => setCurrentPage(3)} isActive={currentPage === 3}>3</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext href="#" onClick={() => setCurrentPage(prev => prev + 1)} />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Footer */}
+      <div className="mt-6 text-center text-sm text-gray-500">
+        <p>© 2025 TravelStay Admin Dashboard. All rights reserved.</p>
       </div>
     </div>
-  )
+  );
 }
